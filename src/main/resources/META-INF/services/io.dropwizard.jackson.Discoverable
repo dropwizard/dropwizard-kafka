@@ -1,0 +1,3 @@
+io.dropwizard.kafka.KafkaProducerFactory
+io.dropwizard.kafka.KafkaConsumerFactory
+io.dropwizard.kafka.security.SecurityFactory

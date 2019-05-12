@@ -1,0 +1,18 @@
+dist: xenial
+language: java
+os:
+  - linux
+jdk:
+  - openjdk11
+before_install:
+  - rm ~/.m2/settings.xml || true 
+  - ulimit -c unlimited -S
+  - mvn -N io.takari:maven:wrapper
+after_success:
+  - bash .travis_after_success.sh
+cache:
+  directories:
+    - $HOME/.m2
+
+notifications:
+  email: false

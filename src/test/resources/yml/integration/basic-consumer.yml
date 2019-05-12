@@ -1,0 +1,7 @@
+type: basic
+bootstrapServers:
+  - placeholder
+consumerGroupId: consumer1
+name: test
+keyDeserializerClass: org.apache.kafka.common.serialization.StringDeserializer
+valueDeserializerClass: org.apache.kafka.common.serialization.StringDeserializer

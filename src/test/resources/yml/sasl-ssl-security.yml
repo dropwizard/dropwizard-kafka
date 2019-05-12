@@ -1,0 +1,4 @@
+securityProtocol: sasl_ssl
+sslProtocol: TLSv1.2
+saslMechanism: PLAIN
+saslJaas: org.apache.kafka.common.security.plain.PlainLoginModule required username="<username>" password="<password>";
