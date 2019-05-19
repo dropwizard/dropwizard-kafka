@@ -1,4 +1,6 @@
 # dropwizard-kafka
+[![Build Status](https://travis-ci.org/dropwizard/dropwizard-kafka.svg?branch=master)](https://travis-ci.org/dropwizard/dropwizard-kafka)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.dropwizard.modules/dropwizard-kafka/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.dropwizard.modules/dropwizard-kafka/)
 
 Provides easy integration for Dropwizard applications with the Apache Kafka client. 
 
