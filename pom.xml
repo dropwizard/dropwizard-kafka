@@ -9,15 +9,6 @@
   <groupId>io.dropwizard.modules</groupId>
   <artifactId>dropwizard-kafka</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <build>
-    <extensions>
-      <extension>
-        <groupId>kr.motd.maven</groupId>
-        <artifactId>os-maven-plugin</artifactId>
-        <version>1.6.2</version>
-      </extension>
-    </extensions>
-  </build>
   <packaging>jar</packaging>
 
   <name>Dropwizard Kafka</name>
