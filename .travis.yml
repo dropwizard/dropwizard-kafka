@@ -1,19 +1,31 @@
 dist: xenial
 language: java
-os:
-  - linux
 jdk:
   - openjdk8
   - openjdk11
 before_install:
-  - rm ~/.m2/settings.xml || true 
+  - rm ~/.m2/settings.xml || true
   - ulimit -c unlimited -S
-  - mvn -N io.takari:maven:wrapper
 after_success:
-  - bash .travis_after_success.sh
+  - bash ci/after_success.sh
 cache:
   directories:
-    - $HOME/.m2
-
-notifications:
-  email: false
+    - "$HOME/.m2"
+deploy:
+  - provider: script
+    script: bash ci/deploy-snapshot.sh
+    on:
+      repo: dropwizard/dropwizard-kafka
+      tags: false
+      branch: master
+      jdk: openjdk8
+  - provider: script
+    script: bash ci/deploy-release.sh
+    on:
+      repo: dropwizard/dropwizard-kafka
+      tags: true
+      jdk: openjdk8
+env:
+  global:
+    - secure: j3+15RbCgML6M2MpM8qkmQ25kD2IMNcT9UjuBe7T6WAqzDvLQ0ZQ10i2/JL+F5Ix6NQJ9W2muQbkjgzdGC6F/bG9G+pRW6DdH7zTzqzidDcfvEPDu4KR6Jft6mW6f81wrxZrJ8pqvqZHzh4ipuMllB/NwA0U9MtNRXSsO/aR7JHOJPGVW15f+M1oU8b7X+sPWeAPX/FVFv7vuLafToLvyjBTWkKyD0zhdvlnCdtSW/VCBCnHujLAp8VA7nGeGK6oA+/dNY27lMFVt4nsj/K8tXRS17oXZMHe/UORxg+ZpT7ZCMImsFradnr6mfsgHJN5Vdc16WXNT2iPRAg59k6qZ9vp5vykOl7RHAcv6Ys+olfck1zU1x+dP8QAFv6laR+tX6Q7HMvYclQ3uJHLVVsIssm9uhoW4Tv7CVI1eAVfyliNBXam1buvK3HLiByvRp1xyVu7eZWecmjJpgfyWnBYmgzQrWODdM1VaincCjl2WQWTcVOqiprCokajY59NMPJNgk4IQVDt2Dr5XpzwfgAartjrH2+g9+N4TK4dxGYXXdeO9nCM6cd/Hu05bEe0T8KaNovVoLHIrVAXAhJMYL1tDFG2AH+pmszhbzV4S+8rxrpDE0P9ka8gkyStPPl1Tsws1fq8sVqfZ0RqfM5NSbR0I4nc7NGyQJbt31EcvX1RdzA=
+    - secure: ZPS2UnavKFUiNMAx+PiFODQ9ICKLdcBnJoISev83rpZJKI1EdkpPzzg1qUdzesMBNlNk9rmwPy49CTBgd59d50SOg8PVAj3TU1DRppZ70Ev5dTp+TVNaDZrMRQLgg5KhPeOnmjXjSAGVp1DtWcuRPLQYwdZ75gksB4DP8S3IhV+UKOL7FHSm++eLHC8UMDZRnn6SqKr1bL3GWX2klThyMieItAyvXizhwgUGyfEA5zCmzwqO+tm8hgDFkk4XHLxXXTWnNA65JdcsmoW7C+Bea1SQ2+5by0HMVylEfiS0/8Y2DeDIRAKq99E6YvgANGhfzMRBu17O5rO2HHq9K2klsA3PGZflCNGkxW+4+32BRmrKV7fXnDy8/8hck0+KpFvW19o4KWus6iCOuz25h3GvXL59qF3wqnL+P7fr95FnlMbpe9G3wLlZuEzzz/21VnwQDLEe6WAdwKbU+Qz68VuaZ117xEHO8s+kSAf0C1iz1FkS8JKCa51OAc91TzWE/BJLHvkUJL6UGmgt0eTewKoTAo2HAJF6JvfKreluWwW72i9I2sd/Xdzy2meI4GLYit42baB+incU7SNe1W1PvDAOT+k/M+igW7Ng9BWWt6pvvXJgYjKTzCjY0FPjeKcQIajavOPZhiYoWPFrak4hcRMZFEqHh7BJgnCIjqgubr/hPPo=
