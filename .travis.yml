@@ -12,13 +12,13 @@ cache:
   directories:
     - "$HOME/.m2"
 deploy:
-#  - provider: script
-#    script: bash ci/deploy-snapshot.sh
-#    on:
-#      repo: dropwizard/dropwizard-kafka
-#      tags: false
-#      branch: master
-#      jdk: openjdk8
+  - provider: script
+    script: bash ci/deploy-snapshot.sh
+    on:
+      repo: dropwizard/dropwizard-kafka
+      tags: false
+      branch: master
+      jdk: openjdk8
   - provider: script
     script: bash ci/deploy-release.sh
     on:
