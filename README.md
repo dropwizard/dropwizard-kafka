@@ -28,7 +28,7 @@ Maven:
 
 Gradle:
 ```groovy
-compile "io.dropwizard:dropwizard-kafka:$dropwizardVersion"
+compile "io.dropwizard.modules:dropwizard-kafka:$dropwizardVersion"
 ```
 
 ### Basic Kafka Producer
