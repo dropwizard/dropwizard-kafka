@@ -20,7 +20,7 @@ Add dependency on library.
 Maven:
 ```xml
 <dependency>
-  <groupId>io.dropwizard</groupId>
+  <groupId>io.dropwizard.modules</groupId>
   <artifactId>dropwizard-kafka</artifactId>
   <version>${dropwizard.version}</version>
 </dependency>
@@ -28,7 +28,7 @@ Maven:
 
 Gradle:
 ```groovy
-compile "io.dropwizard:dropwizard-kafka:$dropwizardVersion"
+compile "io.dropwizard.modules:dropwizard-kafka:$dropwizardVersion"
 ```
 
 ### Basic Kafka Producer
