@@ -56,7 +56,7 @@ public void initialize(Bootstrap<ExampleConfiguration> bootstrap) {
 
 @Override
 public void run(ExampleConfiguration config, Environment environment) {
-    final PersonEventProducer personEventProducer = new PersonEventProducer(kafkaConsumer.getProducer());
+    final PersonEventProducer personEventProducer = new PersonEventProducer(kafkaProducer.getProducer());
     environment.jersey().register(new PersonEventResource(personEventProducer));
 }
 ```
