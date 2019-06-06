@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.jackson.Discoverable;
 import io.dropwizard.kafka.metrics.DropwizardMetricsReporter;
 import io.dropwizard.kafka.security.SecurityFactory;
+import io.dropwizard.kafka.serializer.SerializerFactory;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.record.CompressionType;
-import org.apache.kafka.common.serialization.Serializer;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Collection;
@@ -23,17 +23,21 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory implements Discoverable {
-    @NotEmpty
+    @Valid
+    @NotNull
     @JsonProperty
-    protected String keySerializerClass;
+    protected SerializerFactory keySerializer;
 
-    @NotEmpty
+    @Valid
+    @NotNull
     @JsonProperty
-    protected String valueSerializerClass;
+    protected SerializerFactory valueSerializer;
 
     @JsonProperty
     protected Optional<String> acks = Optional.empty();
@@ -67,12 +71,20 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected int batchSize = 16384;
 
-    public String getKeySerializerClass() {
-        return keySerializerClass;
+    public SerializerFactory getKeySerializer() {
+        return keySerializer;
     }
 
-    public void setKeySerializerClass(final String keySerializerClass) {
-        this.keySerializerClass = keySerializerClass;
+    public void setKeySerializer(final SerializerFactory keySerializer) {
+        this.keySerializer = keySerializer;
+    }
+
+    public SerializerFactory getValueSerializer() {
+        return valueSerializer;
+    }
+
+    public void setValueSerializer(final SerializerFactory valueSerializer) {
+        this.valueSerializer = valueSerializer;
     }
 
     public Optional<String> getAcks() {
@@ -146,23 +158,11 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     public void setBatchSize(final int batchSize) {
         this.batchSize = batchSize;
     }
-
-    public String getValueSerializerClass() {
-        return valueSerializerClass;
-    }
-
-    public void setValueSerializerClass(final String valueSerializerClass) {
-        this.valueSerializerClass = valueSerializerClass;
-    }
-
     protected Map<String, Object> createBaseKafkaConfigurations() {
         final Map<String, Object> config = new HashMap<>();
 
-        DropwizardKafkaUtils.validateStringIsValidSubClass(keySerializerClass, Serializer.class);
-        DropwizardKafkaUtils.validateStringIsValidSubClass(valueSerializerClass, Serializer.class);
-
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializerClass);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializerClass);
+        config.putAll(keySerializer.build(true));
+        config.putAll(valueSerializer.build(false));
 
         security.filter(SecurityFactory::isEnabled)
                 .ifPresent(securityFactory -> config.putAll(securityFactory.build()));

@@ -46,7 +46,7 @@ public class DropwizardKafkaIT {
     @Test
     public void basicProducerShouldConnectToKafka() throws Exception {
 
-        final File yml = new File(Resources.getResource("yml/integration/basic-producer.yml").toURI());
+        final File yml = new File(Resources.getResource("yaml/integration/basic-producer.yaml").toURI());
         final KafkaProducerFactory<String, String> factory = producerConfigFactory.build(yml);
         factory.setBootstrapServers(
                 Arrays.stream(kafka.getEmbeddedKafka().getBrokerAddresses())
@@ -74,7 +74,7 @@ public class DropwizardKafkaIT {
 
     @Test
     public void basicConsumerShouldConnectToKafka() throws Exception {
-        final File yml = new File(Resources.getResource("yml/integration/basic-consumer.yml").toURI());
+        final File yml = new File(Resources.getResource("yaml/integration/basic-consumer.yaml").toURI());
         final KafkaConsumerFactory factory = consumerConfigFactory.build(yml);
         factory.setBootstrapServers(
                 Arrays.stream(kafka.getEmbeddedKafka().getBrokerAddresses())

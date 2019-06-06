@@ -1,0 +1,10 @@
+io.dropwizard.kafka.serializer.ByteArraySerializerFactory
+io.dropwizard.kafka.serializer.ByteBufferSerializerFactory
+io.dropwizard.kafka.serializer.BytesSerializerFactory
+io.dropwizard.kafka.serializer.DoubleSerializerFactory
+io.dropwizard.kafka.serializer.FloatSerializerFactory
+io.dropwizard.kafka.serializer.IntegerSerializerFactory
+io.dropwizard.kafka.serializer.LongSerializerFactory
+io.dropwizard.kafka.serializer.ShortSerializerFactory
+io.dropwizard.kafka.serializer.StringSerializerFactory
+io.dropwizard.kafka.serializer.UUIDSerializerFactory

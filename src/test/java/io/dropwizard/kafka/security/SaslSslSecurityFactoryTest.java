@@ -28,7 +28,7 @@ public class SaslSslSecurityFactoryTest {
 
     @Test
     public void shouldBuildASaslSslSecuritySetOfConfigs() throws Exception {
-        final File yml = new File(Resources.getResource("yml/sasl-ssl-security.yml").toURI());
+        final File yml = new File(Resources.getResource("yaml/security/sasl-ssl-security.yaml").toURI());
         final SecurityFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(SaslSslSecurityFactory.class);

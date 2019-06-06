@@ -1,0 +1,8 @@
+type: basic
+bootstrapServers:
+  - placeholder
+name: test
+keySerializer:
+  type: string
+valueSerializer:
+  type: string
