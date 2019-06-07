@@ -37,6 +37,6 @@ public class ShortDeserializerFactoryTest {
                 .isInstanceOf(ShortDeserializerFactory.class);
         final Map<String, Object> config = factory.build(true);
         assertThat(config.get(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG))
-                .isEqualTo(ShortDeserializer.class.getName());
+                .isEqualTo(ShortDeserializer.class);
     }
 }

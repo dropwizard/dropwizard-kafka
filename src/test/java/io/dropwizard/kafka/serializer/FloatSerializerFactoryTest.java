@@ -37,6 +37,6 @@ public class FloatSerializerFactoryTest {
                 .isInstanceOf(FloatSerializerFactory.class);
         final Map<String, Object> config = factory.build(false);
         assertThat(config.get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
-                .isEqualTo(FloatSerializer.class.getName());
+                .isEqualTo(FloatSerializer.class);
     }
 }

@@ -37,6 +37,6 @@ public class DoubleSerializerFactoryTest {
                 .isInstanceOf(DoubleSerializerFactory.class);
         final Map<String, Object> config = factory.build(false);
         assertThat(config.get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
-                .isEqualTo(DoubleSerializer.class.getName());
+                .isEqualTo(DoubleSerializer.class);
     }
 }

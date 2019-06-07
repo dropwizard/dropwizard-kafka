@@ -37,6 +37,6 @@ public class LongSerializerFactoryTest {
                 .isInstanceOf(LongSerializerFactory.class);
         final Map<String, Object> config = factory.build(false);
         assertThat(config.get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
-                .isEqualTo(LongSerializer.class.getName());
+                .isEqualTo(LongSerializer.class);
     }
 }

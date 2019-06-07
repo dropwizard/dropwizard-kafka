@@ -37,7 +37,7 @@ public class StringSerializerFactoryTest {
                 .isInstanceOf(StringSerializerFactory.class);
         final Map<String, Object> config = factory.build(true);
         assertThat(config.get(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
-                .isEqualTo(StringSerializer.class.getName());
+                .isEqualTo(StringSerializer.class);
         assertThat(config.get("key.serializer.encoding")).isEqualTo("UTF8");
     }
 }

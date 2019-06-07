@@ -37,6 +37,6 @@ public class IntegerDeserializerFactoryTest {
                 .isInstanceOf(IntegerDeserializerFactory.class);
         final Map<String, Object> config = factory.build(true);
         assertThat(config.get(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG))
-                .isEqualTo(IntegerDeserializer.class.getName());
+                .isEqualTo(IntegerDeserializer.class);
     }
 }

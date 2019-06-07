@@ -37,6 +37,6 @@ public class BytesSerializerFactoryTest {
                 .isInstanceOf(BytesSerializerFactory.class);
         final Map<String, Object> config = factory.build(true);
         assertThat(config.get(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
-                .isEqualTo(BytesSerializer.class.getName());
+                .isEqualTo(BytesSerializer.class);
     }
 }

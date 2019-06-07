@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.dropwizard.validation.ValidationMethod;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.nio.charset.Charset;
@@ -35,13 +36,18 @@ public class StringSerializerFactory extends SerializerFactory {
     }
 
     @Override
+    public Class<? extends Serializer> getSerializerClass() {
+        return StringSerializer.class;
+    }
+
+    @Override
     public Map<String, Object> build(final boolean isKey) {
         final String serializerPropertyName = isKey ?
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG : ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
         final String encodingPropertyName = isKey ? "key.serializer.encoding" : "value.serializer.encoding";
 
         final Map<String, Object> config = new HashMap<>();
-        config.put(serializerPropertyName, StringSerializer.class.getName());
+        config.put(serializerPropertyName, getSerializerClass());
         config.put(encodingPropertyName, encoding);
         return Collections.unmodifiableMap(config);
     }

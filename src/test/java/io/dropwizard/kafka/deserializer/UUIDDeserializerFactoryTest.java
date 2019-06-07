@@ -37,7 +37,7 @@ public class UUIDDeserializerFactoryTest {
                 .isInstanceOf(UUIDDeserializerFactory.class);
         final Map<String, Object> config = factory.build(false);
         assertThat(config.get(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG))
-                .isEqualTo(UUIDDeserializer.class.getName());
+                .isEqualTo(UUIDDeserializer.class);
         assertThat(config.get("value.deserializer.encoding")).isEqualTo("UTF8");
     }
 }

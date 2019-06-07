@@ -37,7 +37,7 @@ public class UUIDSerializerFactoryTest {
                 .isInstanceOf(UUIDSerializerFactory.class);
         final Map<String, Object> config = factory.build(false);
         assertThat(config.get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
-                .isEqualTo(UUIDSerializer.class.getName());
+                .isEqualTo(UUIDSerializer.class);
         assertThat(config.get("value.serializer.encoding")).isEqualTo("UTF8");
     }
 }

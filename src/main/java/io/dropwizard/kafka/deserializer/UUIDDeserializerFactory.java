@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.dropwizard.validation.ValidationMethod;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.UUIDDeserializer;
 
 import java.nio.charset.Charset;
@@ -29,10 +30,16 @@ public class UUIDDeserializerFactory extends DeserializerFactory {
     }
 
     @JsonIgnore
-    @ValidationMethod(message = "Invalid charset used for StringDeserializerFactory")
+    @ValidationMethod(message = "Invalid charset used for UUIDDeserializerFactory")
     public boolean isEncodingValid() {
         return Charset.isSupported(encoding);
     }
+
+    @Override
+    public Class<? extends Deserializer> getDeserializerClass() {
+        return UUIDDeserializer.class;
+    }
+
     @Override
     public Map<String, Object> build(final boolean isKey) {
         final String propertyName = isKey ?
@@ -40,7 +47,7 @@ public class UUIDDeserializerFactory extends DeserializerFactory {
         final String encodingPropertyName = isKey ? "key.deserializer.encoding" : "value.deserializer.encoding";
 
         final Map<String, Object> config = new HashMap<>();
-        config.put(propertyName, UUIDDeserializer.class.getName());
+        config.put(propertyName, getDeserializerClass());
         config.put(encodingPropertyName, encoding);
         return Collections.unmodifiableMap(config);
     }

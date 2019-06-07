@@ -37,6 +37,6 @@ public class FloatDeserializerFactoryTest {
                 .isInstanceOf(FloatDeserializerFactory.class);
         final Map<String, Object> config = factory.build(false);
         assertThat(config.get(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG))
-                .isEqualTo(FloatDeserializer.class.getName());
+                .isEqualTo(FloatDeserializer.class);
     }
 }
