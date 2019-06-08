@@ -5,12 +5,15 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.jackson.Discoverable;
+import io.dropwizard.kafka.health.KafkaProducerHealthCheck;
+import io.dropwizard.kafka.managed.KafkaProducerManager;
 import io.dropwizard.kafka.metrics.DropwizardMetricsReporter;
 import io.dropwizard.kafka.security.SecurityFactory;
 import io.dropwizard.kafka.serializer.SerializerFactory;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
 import org.apache.kafka.clients.CommonClientConfigs;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.record.CompressionType;
@@ -158,6 +161,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     public void setBatchSize(final int batchSize) {
         this.batchSize = batchSize;
     }
+
     protected Map<String, Object> createBaseKafkaConfigurations() {
         final Map<String, Object> config = new HashMap<>();
 
@@ -188,16 +192,29 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         return config;
     }
 
+    protected void registerProducerHealthCheck(final HealthCheckRegistry healthChecks, final Producer<K, V> producer,
+                                               final Collection<String> topics) {
+        healthChecks.register(name, new KafkaProducerHealthCheck(producer, topics));
+    }
+
+    protected Producer<K, V> buildProducer(final Map<String, Object> config) {
+        return new KafkaProducer<>(config);
+    }
+
+    protected void manageProducer(final LifecycleEnvironment lifecycle, final Producer<K, V> producer) {
+        lifecycle.manage(new KafkaProducerManager(producer));
+    }
+
     public Producer<K, V> build(final LifecycleEnvironment lifecycle,
                                 final HealthCheckRegistry healthChecks,
-                                final Collection<String> rawTopics,
+                                final Collection<String> topics,
                                 @Nullable final Tracing tracing) {
-        return build(lifecycle, healthChecks, rawTopics, tracing, Collections.emptyMap());
+        return build(lifecycle, healthChecks, topics, tracing, Collections.emptyMap());
     }
 
     public abstract Producer<K, V> build(final LifecycleEnvironment lifecycle,
                                          final HealthCheckRegistry healthChecks,
-                                         Collection<String> rawTopics,
+                                         Collection<String> topics,
                                          @Nullable Tracing tracing,
                                          Map<String, Object> configOverrides);
 }

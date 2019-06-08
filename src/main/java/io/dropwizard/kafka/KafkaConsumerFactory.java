@@ -10,13 +10,13 @@ import io.dropwizard.kafka.health.KafkaConsumerHealthCheck;
 import io.dropwizard.kafka.managed.KafkaConsumerManager;
 import io.dropwizard.kafka.metrics.DropwizardMetricsReporter;
 import io.dropwizard.kafka.security.SecurityFactory;
-import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Collections;
@@ -166,11 +166,19 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
         return config;
     }
 
+    protected Consumer<K, V> buildConsumer(final Map<String, Object> config) {
+        return new KafkaConsumer<>(config);
+    }
+
     protected void registerHealthCheck(final HealthCheckRegistry healthChecks, final Consumer<K, V> consumer) {
         // Only register a single health check for kafka consumers, of which multiple may be built.
         if (!healthChecks.getNames().contains(name)) {
             healthChecks.register(name, new KafkaConsumerHealthCheck(new CheckableConsumer<>(consumer)));
         }
+    }
+
+    protected void manageConsumer(final LifecycleEnvironment lifecycle, final Consumer<K, V> consumer) {
+        lifecycle.manage(new KafkaConsumerManager(consumer));
     }
 
     public Consumer<K, V> build(final LifecycleEnvironment lifecycle,
@@ -185,12 +193,4 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
                                          @Nullable Tracing tracing,
                                          @Nullable ConsumerRebalanceListener rebalanceListener,
                                          Map<String, Object> configOverrides);
-
-    /**
-     * Able to be overriden to provide different {@link Managed} functionality.
-     * @return A Kafka Consumer manager.
-     */
-    protected Managed createKafkaConsumerManager(final Consumer consumer) {
-        return new KafkaConsumerManager(consumer);
-    }
 }
