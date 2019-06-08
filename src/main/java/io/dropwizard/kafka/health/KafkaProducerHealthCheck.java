@@ -4,21 +4,18 @@ import com.codahale.metrics.health.HealthCheck;
 import org.apache.kafka.clients.producer.Producer;
 
 import java.util.Collection;
-import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 public class KafkaProducerHealthCheck extends HealthCheck {
 
-    @Nonnull
     private final Producer producer;
-    @Nonnull
     private final Collection<String> topics;
 
-    public KafkaProducerHealthCheck(@Nonnull final Producer producer,
-                                    @Nonnull final Collection<String> topics) {
-        this.producer = Objects.requireNonNull(producer);
-        this.topics = Objects.requireNonNull(topics);
+    public KafkaProducerHealthCheck(final Producer producer,
+                                    final Collection<String> topics) {
+        this.producer = requireNonNull(producer);
+        this.topics = requireNonNull(topics);
     }
 
     @Override

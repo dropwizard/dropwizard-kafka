@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.jackson.Discoverable;
 import io.dropwizard.kafka.deserializer.DeserializerFactory;
-import io.dropwizard.kafka.health.KafkaConsumerHealthCheck;
 import io.dropwizard.kafka.managed.KafkaConsumerManager;
 import io.dropwizard.kafka.metrics.DropwizardMetricsReporter;
 import io.dropwizard.kafka.security.SecurityFactory;
@@ -171,10 +170,7 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
     }
 
     protected void registerHealthCheck(final HealthCheckRegistry healthChecks, final Consumer<K, V> consumer) {
-        // Only register a single health check for kafka consumers, of which multiple may be built.
-        if (!healthChecks.getNames().contains(name)) {
-            healthChecks.register(name, new KafkaConsumerHealthCheck(new CheckableConsumer<>(consumer)));
-        }
+        // no consumer health checks, due to kafka client limitations. The admin client health check is the better option in general
     }
 
     protected void manageConsumer(final LifecycleEnvironment lifecycle, final Consumer<K, V> consumer) {

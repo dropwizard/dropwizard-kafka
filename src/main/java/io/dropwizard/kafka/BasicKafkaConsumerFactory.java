@@ -4,7 +4,6 @@ import brave.Tracing;
 import brave.kafka.clients.KafkaTracing;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.base.Joiner;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -66,7 +65,7 @@ public class BasicKafkaConsumerFactory<K, V> extends KafkaConsumerFactory<K, V> 
         }
 
         if (!errors.isEmpty()) {
-            final String errorMessage = Joiner.on(System.lineSeparator()).join(errors);
+            final String errorMessage = String.join(System.lineSeparator(), errors);
             log.error("Failed to construct a BASIC Kafka cluster connection, due to the following errors:{}{}", System.lineSeparator(),
                     errorMessage);
             return false;
