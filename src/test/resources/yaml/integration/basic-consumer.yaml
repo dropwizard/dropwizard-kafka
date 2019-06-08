@@ -1,0 +1,9 @@
+type: basic
+bootstrapServers:
+  - placeholder
+consumerGroupId: consumer1
+name: test
+keyDeserializer:
+  type: string
+valueDeserializer:
+  type: string

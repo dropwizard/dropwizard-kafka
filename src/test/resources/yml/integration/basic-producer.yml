@@ -1,6 +1,0 @@
-type: basic
-bootstrapServers:
-  - placeholder
-name: test
-keySerializerClass: org.apache.kafka.common.serialization.StringSerializer
-valueSerializerClass: org.apache.kafka.common.serialization.StringSerializer

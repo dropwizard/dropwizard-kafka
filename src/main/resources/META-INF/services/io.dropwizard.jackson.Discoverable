@@ -1,3 +1,5 @@
-io.dropwizard.kafka.KafkaProducerFactory
+io.dropwizard.kafka.deserializer.DeserializerFactory
 io.dropwizard.kafka.KafkaConsumerFactory
+io.dropwizard.kafka.KafkaProducerFactory
 io.dropwizard.kafka.security.SecurityFactory
+io.dropwizard.kafka.serializer.SerializerFactory

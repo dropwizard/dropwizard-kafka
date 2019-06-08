@@ -1,0 +1,10 @@
+io.dropwizard.kafka.deserializer.ByteArrayDeserializerFactory
+io.dropwizard.kafka.deserializer.ByteBufferDeserializerFactory
+io.dropwizard.kafka.deserializer.BytesDeserializerFactory
+io.dropwizard.kafka.deserializer.DoubleDeserializerFactory
+io.dropwizard.kafka.deserializer.FloatDeserializerFactory
+io.dropwizard.kafka.deserializer.IntegerDeserializerFactory
+io.dropwizard.kafka.deserializer.LongDeserializerFactory
+io.dropwizard.kafka.deserializer.ShortDeserializerFactory
+io.dropwizard.kafka.deserializer.StringDeserializerFactory
+io.dropwizard.kafka.deserializer.UUIDDeserializerFactory

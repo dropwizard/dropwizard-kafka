@@ -33,7 +33,7 @@ public class BasicKafkaConsumerFactoryTest {
 
     @Test
     public void shouldBuildABasicKafkaConsumer() throws Exception {
-        final File yml = new File(Resources.getResource("yml/basic-consumer.yml").toURI());
+        final File yml = new File(Resources.getResource("yaml/basic-consumer.yaml").toURI());
         final KafkaConsumerFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaConsumerFactory.class);
@@ -48,7 +48,7 @@ public class BasicKafkaConsumerFactoryTest {
 
     @Test
     public void buildingMultipleConsumersShouldResultInOnlyASingleHealthCheckRegistered() throws Exception {
-        final File yml = new File(Resources.getResource("yml/basic-consumer.yml").toURI());
+        final File yml = new File(Resources.getResource("yaml/basic-consumer.yaml").toURI());
         final KafkaConsumerFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaConsumerFactory.class);

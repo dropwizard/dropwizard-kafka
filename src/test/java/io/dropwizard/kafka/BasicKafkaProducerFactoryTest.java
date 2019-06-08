@@ -26,7 +26,7 @@ public class BasicKafkaProducerFactoryTest {
 
     @Test
     public void shouldBuildABasicKafkaProducer() throws Exception {
-        final File yml = new File(Resources.getResource("yml/basic-producer.yml").toURI());
+        final File yml = new File(Resources.getResource("yaml/basic-producer.yaml").toURI());
         final KafkaProducerFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaProducerFactory.class);

@@ -3,10 +3,15 @@ bootstrapServers:
   - 127.0.0.1:9092
   - 127.0.0.1:9093
   - 127.0.0.1:9094
-consumerGroupId: consumer1
 name: test
-keyDeserializerClass: org.apache.kafka.common.serialization.StringDeserializer
-valueDeserializerClass: org.apache.kafka.common.serialization.StringDeserializer
+keySerializer:
+  type: string
+valueSerializer:
+  type: string
+acks: all
+retries: 1000
+maxInFlightRequestsPerConnection: 1
+maxPollBlockTime: 20s
 security:
   securityProtocol: sasl_ssl
   sslProtocol: TLSv1.2

@@ -154,3 +154,44 @@ For example, say you would like to use version `1.1.1` of the Kafka client. One 
   </dependency>
 </dependencies>
 ``` 
+
+## Adding support for additional serializers and/or deserializers
+In order to support additional serializers or deserializers, you'll need to create a new factory:
+```java
+@JsonTypeName("my-serializer")
+public class MySerializerFactory extends SerializerFactory {
+
+    @NotNull
+    @JsonProperty
+    private String someConfig;
+    
+    public String getSomeConfig() {
+        return someConfig;
+    }
+  
+    public void setSomeConfig(final String someConfig) {
+        this.someConfig = someConfig;
+    }
+
+
+    @Override
+    public Class<? extends Serializer> getSerializerClass() {
+        return MySerializer.class;
+    }
+}
+```
+
+Then you will need to add the following files to your `src/main/resources/META-INF/services` directory in order to support Jackson 
+polymorphic serialization:
+
+File named `io.dropwizard.jackson.Discoverable`:
+
+```
+io.dropwizard.kafka.serializer.SerializerFactory
+``` 
+
+File named `io.dropwizard.kafka.serializer.SerializerFactory`:
+
+```
+package.name.for.your.MySerializerFactory
+```

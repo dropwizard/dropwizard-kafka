@@ -5,6 +5,7 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.jackson.Discoverable;
+import io.dropwizard.kafka.deserializer.DeserializerFactory;
 import io.dropwizard.kafka.health.KafkaConsumerHealthCheck;
 import io.dropwizard.kafka.managed.KafkaConsumerManager;
 import io.dropwizard.kafka.metrics.DropwizardMetricsReporter;
@@ -16,7 +17,6 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
-import org.apache.kafka.common.serialization.Deserializer;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Collections;
@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -33,13 +34,15 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected String consumerGroupId;
 
-    @NotEmpty
+    @Valid
+    @NotNull
     @JsonProperty
-    protected String keyDeserializerClass;
+    protected DeserializerFactory keyDeserializer;
 
-    @NotEmpty
+    @Valid
+    @NotNull
     @JsonProperty
-    protected String valueDeserializerClass;
+    protected DeserializerFactory valueDeserializer;
 
     @JsonProperty
     protected boolean autoCommitEnabled = true;
@@ -71,12 +74,20 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
         this.consumerGroupId = consumerGroupId;
     }
 
-    public String getKeyDeserializerClass() {
-        return keyDeserializerClass;
+    public DeserializerFactory getKeyDeserializer() {
+        return keyDeserializer;
     }
 
-    public void setKeyDeserializerClass(final String keyDeserializerClass) {
-        this.keyDeserializerClass = keyDeserializerClass;
+    public void setKeyDeserializer(final DeserializerFactory keyDeserializer) {
+        this.keyDeserializer = keyDeserializer;
+    }
+
+    public DeserializerFactory getValueDeserializer() {
+        return valueDeserializer;
+    }
+
+    public void setValueDeserializer(final DeserializerFactory valueDeserializer) {
+        this.valueDeserializer = valueDeserializer;
     }
 
     public boolean isAutoCommitEnabled() {
@@ -127,22 +138,11 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
         this.maxPollInterval = maxPollInterval;
     }
 
-    public String getValueDeserializerClass() {
-        return valueDeserializerClass;
-    }
-
-    public void setValueDeserializerClass(final String valueDeserializerClass) {
-        this.valueDeserializerClass = valueDeserializerClass;
-    }
-
     protected Map<String, Object> createBaseKafkaConfigurations() {
         final Map<String, Object> config = new HashMap<>();
 
-        DropwizardKafkaUtils.validateStringIsValidSubClass(keyDeserializerClass, Deserializer.class);
-        DropwizardKafkaUtils.validateStringIsValidSubClass(valueDeserializerClass, Deserializer.class);
-
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializerClass);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializerClass);
+        config.putAll(keyDeserializer.build(true));
+        config.putAll(valueDeserializer.build(false));
 
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, autoCommitEnabled);
         if (autoCommitEnabled && autoCommitInterval != null) {
