@@ -5,11 +5,8 @@ import brave.kafka.clients.KafkaTracing;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Joiner;
-import io.dropwizard.kafka.health.KafkaProducerHealthCheck;
-import io.dropwizard.kafka.managed.KafkaProducerManager;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import org.apache.kafka.clients.CommonClientConfigs;
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +28,7 @@ public class BasicKafkaProducerFactory<K, V> extends KafkaProducerFactory<K, V> 
     @Override
     public Producer<K, V> build(final LifecycleEnvironment lifecycle,
                                 final HealthCheckRegistry healthChecks,
-                                final Collection<String> rawTopics,
+                                final Collection<String> topics,
                                 @Nullable final Tracing tracing,
                                 final Map<String, Object> configOverrides) {
         final Map<String, Object> config = createBaseKafkaConfigurations();
@@ -45,14 +42,14 @@ public class BasicKafkaProducerFactory<K, V> extends KafkaProducerFactory<K, V> 
         final Optional<KafkaTracing> kafkaTracing = Optional.ofNullable(getTracingFactory())
                 .flatMap(tracingFactory -> tracingFactory.build(tracing));
 
-        final Producer<K, V> rawProducer = new KafkaProducer<>(config);
+        final Producer<K, V> rawProducer = buildProducer(config);
 
         final Producer<K, V> producer = kafkaTracing.map(kTracing -> kTracing.producer(rawProducer))
                 .orElse(rawProducer);
 
-        lifecycle.manage(new KafkaProducerManager(producer));
+        manageProducer(lifecycle, producer);
 
-        healthChecks.register(name, new KafkaProducerHealthCheck(producer, rawTopics));
+        registerProducerHealthCheck(healthChecks, producer, topics);
 
         return producer;
     }

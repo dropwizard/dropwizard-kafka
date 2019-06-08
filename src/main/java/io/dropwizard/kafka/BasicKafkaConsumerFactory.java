@@ -10,7 +10,6 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,12 +45,12 @@ public class BasicKafkaConsumerFactory<K, V> extends KafkaConsumerFactory<K, V> 
         final Optional<KafkaTracing> kafkaTracing = Optional.ofNullable(getTracingFactory())
                 .flatMap(tracingFactory -> tracingFactory.build(tracing));
 
-        final Consumer<K, V> rawConsumer = new KafkaConsumer<>(config);
+        final Consumer<K, V> rawConsumer = buildConsumer(config);
 
         final Consumer<K, V> consumer = kafkaTracing.map(kTracing -> kTracing.consumer(rawConsumer))
                 .orElse(rawConsumer);
 
-        lifecycle.manage(createKafkaConsumerManager(consumer));
+        manageConsumer(lifecycle, consumer);
 
         registerHealthCheck(healthChecks, consumer);
 
