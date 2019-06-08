@@ -3,17 +3,14 @@ package io.dropwizard.kafka.managed;
 import io.dropwizard.lifecycle.Managed;
 import org.apache.kafka.clients.consumer.Consumer;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 public class KafkaConsumerManager implements Managed {
 
-    @Nonnull
     private final Consumer consumer;
 
-    public KafkaConsumerManager(@Nonnull final Consumer consumer) {
-        this.consumer = Objects.requireNonNull(consumer);
+    public KafkaConsumerManager(final Consumer consumer) {
+        this.consumer = requireNonNull(consumer);
     }
 
     @Override

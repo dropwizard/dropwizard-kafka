@@ -5,15 +5,14 @@ import org.apache.kafka.clients.producer.Producer;
 
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import static java.util.Objects.requireNonNull;
 
 public class KafkaProducerManager implements Managed {
 
-    @Nonnull
     private final Producer producer;
 
-    public KafkaProducerManager(@Nonnull final Producer producer) {
-        this.producer = Objects.requireNonNull(producer);
+    public KafkaProducerManager(final Producer producer) {
+        this.producer = requireNonNull(producer);
     }
 
     @Override
