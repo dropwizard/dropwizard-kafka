@@ -7,7 +7,7 @@ Provides easy integration for Dropwizard applications with the Apache Kafka clie
 This bundle comes with out-of-the-box support for:
 * YAML Configuration integration  
 * Producer and Consumer lifecycle management
-* Producer and Consumer health checks
+* Producer and Cluster connection health checks
 * Metrics integration for the Kafka client
 * An easier way to create/configure Kafka consumers/producers than is offered by the base Kafka client
 * Distributed tracing integration, using the [Brave Kafka client instrumentation library](https://github.com/openzipkin/brave/tree/master/instrumentation/kafka-clients).
@@ -71,8 +71,10 @@ producer:
     - 127.0.0.1:9093
     - 127.0.0.1:9094
   name: producerNameToBeUsedInMetrics
-  keySerializerClass: org.apache.kafka.common.serialization.StringSerializer
-  valueSerializerClass: org.apache.kafka.common.serialization.StringDeserializer
+  keySerializer:
+    type: string
+  valueSerializer:
+    type: string
   acks: all
   retries: 2147483647 # int max value
   maxInFlightRequestsPerConnection: 1
@@ -126,8 +128,10 @@ consumer:
     - 127.0.0.1:9094
   consumerGroupId: consumer1
   name: consumerNameToBeUsedInMetrics  
-  keyDeserializerClass: org.apache.kafka.common.serialization.StringDeserializer
-  valueDeserializerClass: org.apache.kafka.common.serialization.StringDeserializer
+  keyDeserializer:
+    type: string
+  valueDeserializer:
+    type: string
   security:
     securityProtocol: sasl_ssl
     sslProtocol: TLSv1.2
