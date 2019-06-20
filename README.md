@@ -37,14 +37,14 @@ In your Dropwizard `Configuration` class, configure a `KafkaProducerFactory`:
 @Valid
 @NotNull
 @JsonProperty("producer")
-private KafkaProducerFactory kafkaProducerFactory;
+private KafkaProducerFactory<String, String> kafkaProducerFactory;
 ```
 
 Then, in your `Application` class, you'll want to do something similar to the following:
 ```java
-private final KafkaProducerBundle<ExampleConfiguration> kafkaProducer = new KafkaProducerBundle<ExampleConfiguration>() {
+private final KafkaProducerBundle<String, String, ExampleConfiguration> kafkaProducer = new KafkaProducerBundle<String, String, ExampleConfiguration>() {
     @Override
-    public KafkaProducerFactory getKafkaProducerFactory(ExampleConfiguration configuration) {
+    public KafkaProducerFactory<String, String> getKafkaProducerFactory(ExampleConfiguration configuration) {
         return configuration.getKafkaProducerFactory();
     }
 };
@@ -93,14 +93,14 @@ In your Dropwizard `Configuration` class, configure a `KafkaConsumerFactory`:
 @Valid
 @NotNull
 @JsonProperty("consumer")
-private KafkaConsumerFactory kafkaConsumerFactory;
+private KafkaConsumerFactory<String, String> kafkaConsumerFactory;
 ```
 
 Then, in your `Application` class, you'll want to do something similar to the following:
 ```java
-private final KafkaConsumerBundle<ExampleConfiguration> kafkaConsumer = new KafkaConsumerBundle<ExampleConfiguration>() {
+private final KafkaConsumerBundle<String, String, ExampleConfiguration> kafkaConsumer = new KafkaConsumerBundle<String, String, ExampleConfiguration>() {
     @Override
-    public KafkaConsumerFactory getKafkaConsumerFactory(ExampleConfiguration configuration) {
+    public KafkaConsumerFactory<String, String> getKafkaConsumerFactory(ExampleConfiguration configuration) {
         return configuration.getKafkaConsumerFactory();
     }
 };
