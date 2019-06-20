@@ -1,6 +1,7 @@
 package io.dropwizard.kafka;
 
 import brave.Tracing;
+import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -13,7 +14,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
-import javax.ws.rs.core.Configuration;
 
 import static java.util.Objects.requireNonNull;
 
