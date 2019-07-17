@@ -30,6 +30,12 @@ public abstract class KafkaClientFactory {
     @JsonProperty
     protected Set<String> bootstrapServers;
 
+    @JsonProperty
+    protected Optional<String> clientDNSLookup = Optional.empty();
+
+    @JsonProperty
+    protected Optional<String> clientId = Optional.empty();
+
     @Valid
     @JsonProperty
     private TracingFactory tracingFactory;
@@ -68,6 +74,22 @@ public abstract class KafkaClientFactory {
 
     public Set<String> getBootstrapServers() {
         return bootstrapServers;
+    }
+
+    public Optional<String> getClientDNSLookup() {
+        return clientDNSLookup;
+    }
+
+    public void setClientDNSLookup(Optional<String> clientDNSLookup) {
+        this.clientDNSLookup = clientDNSLookup;
+    }
+
+    public Optional<String> getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Optional<String> clientId) {
+        this.clientId = clientId;
     }
 
     public void setBootstrapServers(final Set<String> bootstrapServers) {

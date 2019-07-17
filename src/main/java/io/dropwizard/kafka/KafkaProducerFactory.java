@@ -74,8 +74,16 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected int batchSize = 16384;
 
+    @Min(0)
     @JsonProperty
-    protected Optional<Boolean> enableIdempotence = Optional.empty();
+    protected int lingerMs = 0;
+
+    @Min(0)
+    @JsonProperty
+    protected int requestTimeout = 30 * 1000;
+
+    @JsonProperty
+    protected boolean enableIdempotence = false;
 
     public SerializerFactory getKeySerializer() {
         return keySerializer;
@@ -165,11 +173,27 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.batchSize = batchSize;
     }
 
-    public Optional<Boolean> isEnableIdempotence() {
+    public long getLingerMs() {
+        return lingerMs;
+    }
+
+    public void setLingerMs(int lingerMs) {
+        this.lingerMs = lingerMs;
+    }
+
+    public int getRequestTimeout() {
+        return requestTimeout;
+    }
+
+    public void setRequestTimeout(int lingerMs) {
+        this.lingerMs = lingerMs;
+    }
+
+    public boolean isEnableIdempotence() {
         return enableIdempotence;
     }
 
-    public void setEnableIdempotence(final Optional<Boolean> enableIdempotence) {
+    public void setEnableIdempotence(final boolean enableIdempotence) {
         this.enableIdempotence = enableIdempotence;
     }
 
@@ -187,6 +211,8 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
                 config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, maxInFlightRequestsPerConnectionValue));
         maxPollBlockTime.ifPresent(maxPollBlockTimeValue ->
                 config.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, maxPollBlockTimeValue.toMilliseconds()));
+        clientDNSLookup.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, clientIdValue));
+        clientId.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_ID_CONFIG, clientIdValue));
 
         config.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, compressionType);
         config.put(ProducerConfig.SEND_BUFFER_CONFIG, sendBufferBytes);
@@ -194,6 +220,8 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         config.put(ProducerConfig.BUFFER_MEMORY_CONFIG, bufferMemory);
         config.put(ProducerConfig.BATCH_SIZE_CONFIG, batchSize);
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
+        config.put(ProducerConfig.LINGER_MS_CONFIG, lingerMs);
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
 
         if (metricsEnabled) {
             config.put(DropwizardMetricsReporter.SHOULD_INCLUDE_TAGS_CONFIG, Boolean.toString(includeTaggedMetrics));
