@@ -74,6 +74,9 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected int batchSize = 16384;
 
+    @JsonProperty
+    protected Optional<Boolean> enableIdempotence = Optional.empty();
+
     public SerializerFactory getKeySerializer() {
         return keySerializer;
     }
@@ -162,6 +165,14 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.batchSize = batchSize;
     }
 
+    public Optional<Boolean> isEnableIdempotence() {
+        return enableIdempotence;
+    }
+
+    public void setEnableIdempotence(final Optional<Boolean> enableIdempotence) {
+        this.enableIdempotence = enableIdempotence;
+    }
+
     protected Map<String, Object> createBaseKafkaConfigurations() {
         final Map<String, Object> config = new HashMap<>();
 
@@ -182,6 +193,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         config.put(ProducerConfig.RECEIVE_BUFFER_CONFIG, receiveBufferBytes);
         config.put(ProducerConfig.BUFFER_MEMORY_CONFIG, bufferMemory);
         config.put(ProducerConfig.BATCH_SIZE_CONFIG, batchSize);
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
 
         if (metricsEnabled) {
             config.put(DropwizardMetricsReporter.SHOULD_INCLUDE_TAGS_CONFIG, Boolean.toString(includeTaggedMetrics));
