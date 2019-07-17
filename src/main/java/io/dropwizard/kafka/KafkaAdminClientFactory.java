@@ -10,9 +10,11 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
 import org.apache.kafka.clients.ClientDnsLookup;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.metrics.MetricsReporter;
 import org.apache.kafka.common.metrics.Sensor;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -229,7 +231,12 @@ public abstract class KafkaAdminClientFactory {
     }
 
     protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient) {
-        lifecycle.manage(new KafkaAdminClientManager(adminClient, name));
+        manageAdminClientWithTopics(lifecycle, adminClient, null);
+    }
+
+    protected void manageAdminClientWithTopics(final LifecycleEnvironment lifecycle, final AdminClient adminClient,
+                                               Collection<NewTopic> topics) {
+        lifecycle.manage(new KafkaAdminClientManager(adminClient, name, topics));
     }
 
     protected void registerHealthCheck(final HealthCheckRegistry healthChecks, final AdminClient adminClient) {

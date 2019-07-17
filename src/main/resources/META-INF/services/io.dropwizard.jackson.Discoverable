@@ -1,4 +1,3 @@
-io.dropwizard.kafka.KafkaTopicsFactory
 io.dropwizard.kafka.deserializer.DeserializerFactory
 io.dropwizard.kafka.KafkaConsumerFactory
 io.dropwizard.kafka.KafkaProducerFactory

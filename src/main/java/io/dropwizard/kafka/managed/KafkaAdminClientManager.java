@@ -1,7 +1,10 @@
 package io.dropwizard.kafka.managed;
 
+import java.util.Collection;
+
 import io.dropwizard.lifecycle.Managed;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,15 +15,20 @@ public class KafkaAdminClientManager implements Managed {
 
     private final AdminClient adminClient;
     private final String name;
+    private final Collection<NewTopic> topics;
 
-    public KafkaAdminClientManager(final AdminClient adminClient, final String name) {
+    public KafkaAdminClientManager(final AdminClient adminClient, final String name, Collection<NewTopic> topics) {
         this.adminClient = requireNonNull(adminClient);
         this.name = requireNonNull(name);
+        this.topics = topics;
     }
 
     @Override
     public void start() throws Exception {
-        // do nothing
+        if (this.topics != null && !this.topics.isEmpty()) {
+            // TODO: Check if topics already exist
+            this.adminClient.createTopics(this.topics);
+        }
     }
 
     @Override
