@@ -5,10 +5,12 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
 
     @Override
     public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
-                             final Map<String, Object> configOverrides) {
+                             final Map<String, Object> configOverrides, Collection<NewTopic> topics) {
         final Map<String, Object> config = new HashMap<>();
 
         config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, String.join(",", bootstrapServers));
@@ -52,11 +54,17 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
 
         final AdminClient adminClient = buildAdminClient(config);
 
-        manageAdminClient(lifecycle, adminClient);
+        manageAdminClient(lifecycle, adminClient, topics);
 
         registerHealthCheck(healthChecks, adminClient);
 
         return adminClient;
+    }
+
+    @Override
+    public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
+                             final Map<String, Object> configOverrides) {
+        return build(healthChecks, lifecycle, configOverrides, null);
     }
 
     @ValidationMethod(message = "Bootstrap servers must not be null or empty in BasicKafkaAdminClientFactory")

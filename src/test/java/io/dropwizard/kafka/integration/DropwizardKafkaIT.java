@@ -7,9 +7,15 @@ import com.google.common.io.Resources;
 import io.dropwizard.configuration.YamlConfigurationFactory;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
+import io.dropwizard.kafka.BasicKafkaAdminClientFactory;
+import io.dropwizard.kafka.KafkaAdminClientFactory;
 import io.dropwizard.kafka.KafkaConsumerFactory;
 import io.dropwizard.kafka.KafkaProducerFactory;
+import io.dropwizard.kafka.KafkaTopicFactory;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
+
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.Producer;
@@ -22,6 +28,10 @@ import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -42,6 +52,8 @@ public class DropwizardKafkaIT {
             new YamlConfigurationFactory<>(KafkaProducerFactory.class, validator, objectMapper, "dw");
     private final YamlConfigurationFactory<KafkaConsumerFactory> consumerConfigFactory =
             new YamlConfigurationFactory<>(KafkaConsumerFactory.class, validator, objectMapper, "dw");
+    private final YamlConfigurationFactory<AdminClientIntegrationConfiguration> adminTopicConfigFactory =
+            new YamlConfigurationFactory<>(AdminClientIntegrationConfiguration.class, validator, objectMapper, "dw");
 
     @Test
     public void basicProducerShouldConnectToKafka() throws Exception {
@@ -91,5 +103,25 @@ public class DropwizardKafkaIT {
             assertThat(foundRecords)
                     .isEmpty();
         }
+    }
+
+    @Test
+    public void basicAdminShouldCreateTopics() throws Exception {
+        final File yml = new File(Resources.getResource("yaml/integration/basic-admin.yaml").toURI());
+        final AdminClientIntegrationConfiguration factory = adminTopicConfigFactory.build(yml);
+        factory.setBootstrapServers(
+                Arrays.stream(kafka.getEmbeddedKafka().getBrokerAddresses())
+                        .map(BrokerAddress::toString)
+                        .collect(Collectors.toSet())
+        );
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
+
+        KafkaTopicFactory topicFactory = factory.getTopic();
+        Collection<NewTopic> topics = Collections.singletonList(topicFactory.asNewTopic());
+        AdminClient adminClient = factory.getAdminClientFactory().build(healthChecks, lifecycle, null, topics);
+
+        Set<String> clusterTopics = adminClient.listTopics().names().get();
+        assertThat(clusterTopics.contains(topicFactory.getName())).isTrue();
     }
 }

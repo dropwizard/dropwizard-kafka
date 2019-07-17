@@ -231,10 +231,10 @@ public abstract class KafkaAdminClientFactory {
     }
 
     protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient) {
-        manageAdminClientWithTopics(lifecycle, adminClient, null);
+        manageAdminClient(lifecycle, adminClient, null);
     }
 
-    protected void manageAdminClientWithTopics(final LifecycleEnvironment lifecycle, final AdminClient adminClient,
+    protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient,
                                                Collection<NewTopic> topics) {
         lifecycle.manage(new KafkaAdminClientManager(adminClient, name, topics));
     }
@@ -244,4 +244,6 @@ public abstract class KafkaAdminClientFactory {
     }
 
     public abstract AdminClient build(HealthCheckRegistry healthChecks, LifecycleEnvironment lifecycle, Map<String, Object> config);
+
+    public abstract AdminClient build(HealthCheckRegistry healthChecks, LifecycleEnvironment lifecycle, Map<String, Object> config, Collection<NewTopic> topics);
 }

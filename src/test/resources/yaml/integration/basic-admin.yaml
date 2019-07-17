@@ -1,0 +1,10 @@
+admin:
+  bootstrapServers:
+    - placeholder
+  name: test
+
+topic:
+  name: foo
+  partitions: 2
+  replicationFactor: 1
+
