@@ -76,11 +76,11 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
 
     @Min(0)
     @JsonProperty
-    protected int lingerMs = 0;
+    protected int lingerMs = (int) Duration.milliseconds(0l).toMilliseconds();
 
     @Min(0)
     @JsonProperty
-    protected int requestTimeout = 30 * 1000;
+    protected int requestTimeout = (int) Duration.seconds(30).toMilliseconds();
 
     @JsonProperty
     protected boolean enableIdempotence = false;
