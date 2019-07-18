@@ -12,6 +12,8 @@ acks: all
 retries: 1000
 maxInFlightRequestsPerConnection: 1
 maxPollBlockTime: 20s
+lingerMs: 0
+requestTimeout: 30
 security:
   securityProtocol: sasl_ssl
   sslProtocol: TLSv1.2

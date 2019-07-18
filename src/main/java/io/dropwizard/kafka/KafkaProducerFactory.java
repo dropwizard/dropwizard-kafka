@@ -19,16 +19,11 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.record.CompressionType;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.*;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory implements Discoverable {
@@ -74,13 +69,13 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected int batchSize = 16384;
 
-    @Min(0)
+    @Min(0l)
     @JsonProperty
-    protected int lingerMs = (int) Duration.milliseconds(0l).toMilliseconds();
+    protected long lingerMs = 0l;
 
     @Min(0)
     @JsonProperty
-    protected int requestTimeout = (int) Duration.seconds(30).toMilliseconds();
+    protected int requestTimeout = 30;
 
     @JsonProperty
     protected boolean enableIdempotence = false;
@@ -177,7 +172,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         return lingerMs;
     }
 
-    public void setLingerMs(int lingerMs) {
+    public void setLingerMs(final long lingerMs) {
         this.lingerMs = lingerMs;
     }
 
@@ -185,8 +180,8 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         return requestTimeout;
     }
 
-    public void setRequestTimeout(int lingerMs) {
-        this.lingerMs = lingerMs;
+    public void setRequestTimeout(final int requestTimeout) {
+        this.requestTimeout = requestTimeout;
     }
 
     public boolean isEnableIdempotence() {
