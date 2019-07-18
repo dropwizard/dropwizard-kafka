@@ -85,6 +85,9 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected boolean enableIdempotence = false;
 
+    @JsonProperty
+    protected Optional<String> transactionalId = Optional.empty();
+
     public SerializerFactory getKeySerializer() {
         return keySerializer;
     }
@@ -197,6 +200,14 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.enableIdempotence = enableIdempotence;
     }
 
+    public Optional<String> getTransactionalId() {
+        return transactionalId;
+    }
+
+    public void setTransactionalId(final Optional<String> transactionalId) {
+        this.transactionalId = transactionalId;
+    }
+
     protected Map<String, Object> createBaseKafkaConfigurations() {
         final Map<String, Object> config = new HashMap<>();
 
@@ -213,6 +224,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
                 config.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, maxPollBlockTimeValue.toMilliseconds()));
         clientDNSLookup.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, clientIdValue));
         clientId.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_ID_CONFIG, clientIdValue));
+        transactionalId.ifPresent(transactionalIdValue -> config.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionalIdValue));
 
         config.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, compressionType);
         config.put(ProducerConfig.SEND_BUFFER_CONFIG, sendBufferBytes);

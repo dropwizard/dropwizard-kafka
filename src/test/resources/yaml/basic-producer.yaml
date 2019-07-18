@@ -14,6 +14,8 @@ maxInFlightRequestsPerConnection: 1
 maxPollBlockTime: 20s
 linger: 0ms
 requestTimeout: 30s
+enableIdempotence: true
+transactionalId: testId
 security:
   securityProtocol: sasl_ssl
   sslProtocol: TLSv1.2
