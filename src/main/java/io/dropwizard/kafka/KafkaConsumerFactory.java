@@ -148,6 +148,9 @@ public abstract class KafkaConsumerFactory<K, V> extends KafkaClientFactory impl
             config.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, (int) autoCommitInterval.toMilliseconds());
         }
 
+        clientDNSLookup.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, clientIdValue));
+        clientId.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_ID_CONFIG, clientIdValue));
+
         config.put(ConsumerConfig.SEND_BUFFER_CONFIG, sendBufferBytes);
         config.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, receiveBufferBytes);
         config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);

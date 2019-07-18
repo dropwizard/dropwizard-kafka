@@ -12,6 +12,7 @@ import io.dropwizard.kafka.security.SecurityFactory;
 import io.dropwizard.kafka.serializer.SerializerFactory;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
+import io.dropwizard.validation.MinDuration;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -19,16 +20,15 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.record.CompressionType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.annotation.Nullable;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.annotation.Nullable;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory implements Discoverable {
@@ -73,6 +73,17 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @Min(0)
     @JsonProperty
     protected int batchSize = 16384;
+
+    @MinDuration(0)
+    @JsonProperty
+    protected Duration linger = Duration.milliseconds(0);
+
+    @MinDuration(0)
+    @JsonProperty
+    protected Duration requestTimeout = Duration.seconds(30);
+
+    @JsonProperty
+    protected boolean enableIdempotence = false;
 
     public SerializerFactory getKeySerializer() {
         return keySerializer;
@@ -162,6 +173,30 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.batchSize = batchSize;
     }
 
+    public Duration getLinger() {
+        return linger;
+    }
+
+    public void setLinger(final Duration linger) {
+        this.linger = linger;
+    }
+
+    public Duration getRequestTimeout() {
+        return requestTimeout;
+    }
+
+    public void setRequestTimeout(final Duration requestTimeout) {
+        this.requestTimeout = requestTimeout;
+    }
+
+    public boolean isEnableIdempotence() {
+        return enableIdempotence;
+    }
+
+    public void setEnableIdempotence(final boolean enableIdempotence) {
+        this.enableIdempotence = enableIdempotence;
+    }
+
     protected Map<String, Object> createBaseKafkaConfigurations() {
         final Map<String, Object> config = new HashMap<>();
 
@@ -176,12 +211,17 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
                 config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, maxInFlightRequestsPerConnectionValue));
         maxPollBlockTime.ifPresent(maxPollBlockTimeValue ->
                 config.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, maxPollBlockTimeValue.toMilliseconds()));
+        clientDNSLookup.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_DNS_LOOKUP_CONFIG, clientIdValue));
+        clientId.ifPresent(clientIdValue -> config.put(CommonClientConfigs.CLIENT_ID_CONFIG, clientIdValue));
 
         config.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, compressionType);
         config.put(ProducerConfig.SEND_BUFFER_CONFIG, sendBufferBytes);
         config.put(ProducerConfig.RECEIVE_BUFFER_CONFIG, receiveBufferBytes);
         config.put(ProducerConfig.BUFFER_MEMORY_CONFIG, bufferMemory);
         config.put(ProducerConfig.BATCH_SIZE_CONFIG, batchSize);
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
+        config.put(ProducerConfig.LINGER_MS_CONFIG, (int) linger.toMilliseconds());
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, (int) requestTimeout.toMilliseconds());
 
         if (metricsEnabled) {
             config.put(DropwizardMetricsReporter.SHOULD_INCLUDE_TAGS_CONFIG, Boolean.toString(includeTaggedMetrics));
