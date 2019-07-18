@@ -12,6 +12,7 @@ import io.dropwizard.kafka.security.SecurityFactory;
 import io.dropwizard.kafka.serializer.SerializerFactory;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
+import io.dropwizard.validation.MinDuration;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -23,7 +24,11 @@ import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory implements Discoverable {
@@ -69,13 +74,13 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
     @JsonProperty
     protected int batchSize = 16384;
 
-    @Min(0l)
+    @MinDuration(0)
     @JsonProperty
-    protected long lingerMs = 0l;
+    protected Duration lingerMs = Duration.milliseconds(0);
 
-    @Min(0)
+    @MinDuration(0)
     @JsonProperty
-    protected int requestTimeoutMs = 30 * 1000;
+    protected Duration requestTimeout = Duration.seconds(30);
 
     @JsonProperty
     protected boolean enableIdempotence = false;
@@ -168,20 +173,20 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.batchSize = batchSize;
     }
 
-    public long getLingerMs() {
+    public Duration getLingerMs() {
         return lingerMs;
     }
 
-    public void setLingerMs(final long lingerMs) {
+    public void setLingerMs(final Duration lingerMs) {
         this.lingerMs = lingerMs;
     }
 
-    public int getRequestTimeoutMs() {
-        return requestTimeoutMs;
+    public Duration getRequestTimeout() {
+        return requestTimeout;
     }
 
-    public void setRequestTimeoutMs(final int requestTimeoutMs) {
-        this.requestTimeoutMs = requestTimeoutMs;
+    public void setRequestTimeout(final Duration requestTimeout) {
+        this.requestTimeout = requestTimeout;
     }
 
     public boolean isEnableIdempotence() {
@@ -216,7 +221,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         config.put(ProducerConfig.BATCH_SIZE_CONFIG, batchSize);
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
         config.put(ProducerConfig.LINGER_MS_CONFIG, lingerMs);
-        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeoutMs);
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
 
         if (metricsEnabled) {
             config.put(DropwizardMetricsReporter.SHOULD_INCLUDE_TAGS_CONFIG, Boolean.toString(includeTaggedMetrics));
