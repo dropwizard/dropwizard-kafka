@@ -76,7 +76,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
 
     @MinDuration(0)
     @JsonProperty
-    protected Duration lingerMs = Duration.milliseconds(0);
+    protected Duration linger = Duration.milliseconds(0);
 
     @MinDuration(0)
     @JsonProperty
@@ -173,12 +173,12 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.batchSize = batchSize;
     }
 
-    public Duration getLingerMs() {
-        return lingerMs;
+    public Duration getLinger() {
+        return linger;
     }
 
-    public void setLingerMs(final Duration lingerMs) {
-        this.lingerMs = lingerMs;
+    public void setLinger(final Duration linger) {
+        this.linger = linger;
     }
 
     public Duration getRequestTimeout() {
@@ -220,8 +220,8 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         config.put(ProducerConfig.BUFFER_MEMORY_CONFIG, bufferMemory);
         config.put(ProducerConfig.BATCH_SIZE_CONFIG, batchSize);
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
-        config.put(ProducerConfig.LINGER_MS_CONFIG, lingerMs);
-        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
+        config.put(ProducerConfig.LINGER_MS_CONFIG, (int) linger.toMilliseconds());
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, (int) requestTimeout.toMilliseconds());
 
         if (metricsEnabled) {
             config.put(DropwizardMetricsReporter.SHOULD_INCLUDE_TAGS_CONFIG, Boolean.toString(includeTaggedMetrics));
