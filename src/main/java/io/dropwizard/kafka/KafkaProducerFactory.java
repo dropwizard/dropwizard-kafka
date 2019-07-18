@@ -75,7 +75,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
 
     @Min(0)
     @JsonProperty
-    protected int requestTimeout = 30;
+    protected int requestTimeoutMs = 30 * 1000;
 
     @JsonProperty
     protected boolean enableIdempotence = false;
@@ -176,12 +176,12 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         this.lingerMs = lingerMs;
     }
 
-    public int getRequestTimeout() {
-        return requestTimeout;
+    public int getRequestTimeoutMs() {
+        return requestTimeoutMs;
     }
 
-    public void setRequestTimeout(final int requestTimeout) {
-        this.requestTimeout = requestTimeout;
+    public void setRequestTimeoutMs(final int requestTimeoutMs) {
+        this.requestTimeoutMs = requestTimeoutMs;
     }
 
     public boolean isEnableIdempotence() {
@@ -216,7 +216,7 @@ public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory impl
         config.put(ProducerConfig.BATCH_SIZE_CONFIG, batchSize);
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence);
         config.put(ProducerConfig.LINGER_MS_CONFIG, lingerMs);
-        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeoutMs);
 
         if (metricsEnabled) {
             config.put(DropwizardMetricsReporter.SHOULD_INCLUDE_TAGS_CONFIG, Boolean.toString(includeTaggedMetrics));
