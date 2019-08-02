@@ -1,8 +1,10 @@
-name: integration-test
+name: test
 clientId: junit
 metricsReporters: []
 bootstrapServers:
-  - placeholder
+  - 127.0.0.1:9092
+  - 127.0.0.1:9093
+  - 127.0.0.1:9094
 
 createTopics: true
 topics:
@@ -14,4 +16,4 @@ topics:
     partitions: 2
     replicationFactor: 1
     configs:
-      cleanup.polcy: compact
+      cleanup.policy: compact

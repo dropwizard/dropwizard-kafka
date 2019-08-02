@@ -11,9 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,7 +37,7 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
         config.put(AdminClientConfig.RETRIES_CONFIG, retries);
         config.put(AdminClientConfig.RETRY_BACKOFF_MS_CONFIG, retryBackoff.toMilliseconds());
         config.put(AdminClientConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, connectionMaxIdle.toMilliseconds());
-        config.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout.toMilliseconds());
+        config.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, (int) requestTimeout.toMilliseconds());
         config.put(AdminClientConfig.METADATA_MAX_AGE_CONFIG, metadataMaxAge.toMilliseconds());
         config.put(AdminClientConfig.SEND_BUFFER_CONFIG, sendBufferBytes);
         config.put(AdminClientConfig.RECEIVE_BUFFER_CONFIG, receiveBufferBytes);
@@ -64,15 +66,30 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
     @Override
     public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
                              final Map<String, Object> configOverrides) {
-        return build(healthChecks, lifecycle, configOverrides, null);
+        List<NewTopic> newTopics = Collections.emptyList();
+        if (createTopics) {
+             newTopics = topics.stream()
+                    .map(KafkaTopicFactory::asNewTopic)
+                    .collect(Collectors.toList());
+        }
+        return build(healthChecks, lifecycle, configOverrides, newTopics);
     }
 
-    @ValidationMethod(message = "Bootstrap servers must not be null or empty in BasicKafkaAdminClientFactory")
+    @ValidationMethod(message = "Bootstrap servers must not be null or empty in BasicKafkaAdminClientFactory " +
+            "and topics must be defined if allowed to be created")
     public boolean isValidConfiguration() {
         final List<String> errors = new ArrayList<>();
 
         if (bootstrapServers != null && bootstrapServers.isEmpty()) {
             errors.add("bootstrapServers cannot be empty if basic type is configured");
+        }
+
+        if (createTopics && (topics == null || topics.isEmpty())) {
+            errors.add("createTopics cannot be true with no topics defined");
+        }
+
+        if (!createTopics && !(topics == null || topics.isEmpty())) {
+            log.warn("createTopics was set to false, but topics were defined");
         }
 
         if (!errors.isEmpty()) {

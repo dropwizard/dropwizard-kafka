@@ -14,15 +14,16 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.metrics.MetricsReporter;
 import org.apache.kafka.common.metrics.Sensor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 public abstract class KafkaAdminClientFactory {
     @NotNull
     @JsonProperty
@@ -81,6 +82,11 @@ public abstract class KafkaAdminClientFactory {
     @Valid
     @JsonProperty
     protected SecurityFactory security;
+    @JsonProperty
+    protected boolean createTopics;
+    @Valid
+    @JsonProperty
+    protected Set<KafkaTopicFactory> topics;
 
     public String getName() {
         return name;
@@ -226,12 +232,31 @@ public abstract class KafkaAdminClientFactory {
         this.security = security;
     }
 
+    public Set<KafkaTopicFactory> getTopics() {
+        return topics;
+    }
+
+    public Boolean shouldCreateTopics() {
+        return createTopics;
+    }
+
+    public void shouldCreateTopics(boolean createTopics) {
+        this.createTopics = createTopics;
+    }
+
     protected AdminClient buildAdminClient(final Map<String, Object> config) {
         return AdminClient.create(config);
     }
 
     protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient) {
-        manageAdminClient(lifecycle, adminClient, null);
+
+        List<NewTopic> newTopics = Collections.emptyList();
+        if (createTopics) {
+            newTopics = topics.stream()
+                    .map(KafkaTopicFactory::asNewTopic)
+                    .collect(Collectors.toList());
+        }
+        manageAdminClient(lifecycle, adminClient, newTopics);
     }
 
     protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient,
