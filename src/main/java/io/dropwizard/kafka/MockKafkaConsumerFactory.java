@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
+import org.apache.kafka.clients.consumer.MockConsumer;
+import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -14,7 +16,7 @@ import java.util.Map;
 public class MockKafkaConsumerFactory<K, V> extends KafkaConsumerFactory<K, V> {
     @Override
     public Consumer<K, V> build(LifecycleEnvironment lifecycle, HealthCheckRegistry healthChecks, @Nullable Tracing tracing, @Nullable ConsumerRebalanceListener rebalanceListener, Map<String, Object> configOverrides) {
-        return null; // no-op
+        return new MockConsumer<>(OffsetResetStrategy.EARLIEST);
     }
 
     @Override
