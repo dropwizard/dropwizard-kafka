@@ -1,1 +1,2 @@
 io.dropwizard.kafka.BasicKafkaProducerFactory
+io.dropwizard.kafka.MockKafkaProducerFactory

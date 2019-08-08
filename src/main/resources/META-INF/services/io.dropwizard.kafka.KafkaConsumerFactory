@@ -1,1 +1,2 @@
 io.dropwizard.kafka.BasicKafkaConsumerFactory
+io.dropwizard.kafka.MockKafkaConsumerFactory
