@@ -24,7 +24,7 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
 
     @Override
     public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
-                             final Map<String, Object> configOverrides, Collection<NewTopic> topics) {
+                             final Map<String, Object> configOverrides, final Collection<NewTopic> topics) {
         final Map<String, Object> config = new HashMap<>();
 
         config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, String.join(",", bootstrapServers));
@@ -67,7 +67,7 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
     public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
                              final Map<String, Object> configOverrides) {
         List<NewTopic> newTopics = Collections.emptyList();
-        if (createTopics) {
+        if (topicCreationEnabled) {
              newTopics = topics.stream()
                     .map(KafkaTopicFactory::asNewTopic)
                     .collect(Collectors.toList());
@@ -84,12 +84,12 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
             errors.add("bootstrapServers cannot be empty if basic type is configured");
         }
 
-        if (createTopics && (topics == null || topics.isEmpty())) {
-            errors.add("createTopics cannot be true with no topics defined");
+        if (topicCreationEnabled && topics.isEmpty()) {
+            errors.add("topicCreationEnabled cannot be true with no topics defined");
         }
 
-        if (!createTopics && !(topics == null || topics.isEmpty())) {
-            log.warn("createTopics was set to false, but topics were defined");
+        if (!topicCreationEnabled && !topics.isEmpty()) {
+            log.warn("topicCreationEnabled was set to false, but topics were defined");
         }
 
         if (!errors.isEmpty()) {

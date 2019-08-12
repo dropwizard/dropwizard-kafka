@@ -83,10 +83,11 @@ public abstract class KafkaAdminClientFactory {
     @JsonProperty
     protected SecurityFactory security;
     @JsonProperty
-    protected boolean createTopics;
+    protected boolean topicCreationEnabled = false;
     @Valid
+    @NotNull
     @JsonProperty
-    protected Set<KafkaTopicFactory> topics;
+    protected Set<KafkaTopicFactory> topics = Collections.emptySet();
 
     public String getName() {
         return name;
@@ -236,12 +237,12 @@ public abstract class KafkaAdminClientFactory {
         return topics;
     }
 
-    public Boolean shouldCreateTopics() {
-        return createTopics;
+    public Boolean getTopicCreationEnabled() {
+        return topicCreationEnabled;
     }
 
-    public void shouldCreateTopics(boolean createTopics) {
-        this.createTopics = createTopics;
+    public void setTopicCreationEnabled(boolean topicCreationEnabled) {
+        this.topicCreationEnabled = topicCreationEnabled;
     }
 
     protected AdminClient buildAdminClient(final Map<String, Object> config) {
@@ -249,9 +250,8 @@ public abstract class KafkaAdminClientFactory {
     }
 
     protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient) {
-
         List<NewTopic> newTopics = Collections.emptyList();
-        if (createTopics) {
+        if (topicCreationEnabled) {
             newTopics = topics.stream()
                     .map(KafkaTopicFactory::asNewTopic)
                     .collect(Collectors.toList());
@@ -259,8 +259,7 @@ public abstract class KafkaAdminClientFactory {
         manageAdminClient(lifecycle, adminClient, newTopics);
     }
 
-    protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient,
-                                               Collection<NewTopic> topics) {
+    protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient, final Collection<NewTopic> topics) {
         lifecycle.manage(new KafkaAdminClientManager(adminClient, name, topics));
     }
 

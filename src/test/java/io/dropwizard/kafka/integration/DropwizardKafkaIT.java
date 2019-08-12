@@ -20,6 +20,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.kafka.test.core.BrokerAddress;
@@ -28,6 +29,7 @@ import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 import javax.validation.Validator;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -120,10 +122,25 @@ public class DropwizardKafkaIT {
                 .stream()
                 .map(KafkaTopicFactory::asNewTopic)
                 .collect(Collectors.toList());
-        AdminClient adminClient = factory.build(healthChecks, lifecycle, null, newTopics);
+        AdminClient adminClient = factory.build(healthChecks, lifecycle, Collections.emptyMap(), newTopics);
+
+        // forcibly start the managed admin client
+        for (LifeCycle lc : lifecycle.getManagedObjects()) {
+            lc.start();
+        }
 
         Set<String> clusterTopics = adminClient.listTopics().names().get();
-        assertThat(clusterTopics.contains(newTopics.get(0).name()))
+        assertThat(clusterTopics.isEmpty())
+                .isFalse();
+
+        assertThat(clusterTopics.containsAll(
+                newTopics.stream()
+                        .map(NewTopic::name)
+                        .collect(Collectors.toSet())))
                 .isTrue();
+
+        for (LifeCycle lc : lifecycle.getManagedObjects()) {
+            lc.stop();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package io.dropwizard.kafka.managed;
 
 import java.util.Collection;
+import java.util.Set;
 
 import io.dropwizard.lifecycle.Managed;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -17,7 +18,7 @@ public class KafkaAdminClientManager implements Managed {
     private final String name;
     private final Collection<NewTopic> topics;
 
-    public KafkaAdminClientManager(final AdminClient adminClient, final String name, Collection<NewTopic> topics) {
+    public KafkaAdminClientManager(final AdminClient adminClient, final String name, final Collection<NewTopic> topics) {
         this.adminClient = requireNonNull(adminClient);
         this.name = requireNonNull(name);
         this.topics = topics;
@@ -25,8 +26,19 @@ public class KafkaAdminClientManager implements Managed {
 
     @Override
     public void start() throws Exception {
-        if (this.topics != null && !this.topics.isEmpty()) {
-            // TODO: Check if topics already exist
+        log.info("Starting adminClient for name={}", name);
+        if (!this.topics.isEmpty()) {
+            log.trace("Searching existing topics in cluster.");
+            final Set<String> existingTopics = this.adminClient.listTopics().names().get();
+            for (String t : existingTopics) {
+                this.topics.removeIf(newTopic -> {
+                    boolean match = newTopic.name().equals(t);
+                    if (match) {
+                        log.warn("Not attempting to re-create existing topic {}.", newTopic.name());
+                    }
+                    return match;
+                });
+            }
             this.adminClient.createTopics(this.topics);
         }
     }

@@ -6,6 +6,8 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,6 +29,7 @@ public class KafkaTopicFactory {
     @JsonProperty
     private short replicationFactor;
 
+    @NotNull
     @JsonProperty
     private Map<String, String> configs = Collections.emptyMap();
 

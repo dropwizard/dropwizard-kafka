@@ -48,7 +48,7 @@ public class BasicAdminClientFactoryTest {
         final AdminClient adminClient = factory.build(healthCheckRegistry, lifecycle, Collections.emptyMap());
         assertThat(adminClient)
                 .isNotNull();
-        assertThat(factory.shouldCreateTopics())
+        assertThat(factory.getTopicCreationEnabled())
                 .isTrue();
         assertThat(factory.getTopics().size())
                 .isEqualTo(2);

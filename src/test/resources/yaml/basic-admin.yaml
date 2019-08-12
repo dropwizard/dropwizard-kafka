@@ -6,7 +6,7 @@ bootstrapServers:
   - 127.0.0.1:9093
   - 127.0.0.1:9094
 
-createTopics: true
+topicCreationEnabled: true
 topics:
   - name: foo
     partitions: 2
