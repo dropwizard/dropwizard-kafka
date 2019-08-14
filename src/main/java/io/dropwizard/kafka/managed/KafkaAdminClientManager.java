@@ -1,6 +1,8 @@
 package io.dropwizard.kafka.managed;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import io.dropwizard.lifecycle.Managed;
@@ -30,14 +32,18 @@ public class KafkaAdminClientManager implements Managed {
         if (!this.topics.isEmpty()) {
             log.trace("Searching existing topics in cluster.");
             final Set<String> existingTopics = this.adminClient.listTopics().names().get();
+            final List<String> matchingTopics = new ArrayList<>();
             for (String t : existingTopics) {
                 this.topics.removeIf(newTopic -> {
                     boolean match = newTopic.name().equals(t);
                     if (match) {
-                        log.warn("Not attempting to re-create existing topic {}.", newTopic.name());
+                        matchingTopics.add(t);
                     }
                     return match;
                 });
+            }
+            if (!matchingTopics.isEmpty()) {
+                log.info("Not attempting to re-create existing topics {}.", matchingTopics);
             }
             this.adminClient.createTopics(this.topics);
         }
