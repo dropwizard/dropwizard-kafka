@@ -1,0 +1,17 @@
+name: integration-test
+clientId: junit
+metricsReporters: []
+bootstrapServers:
+  - placeholder
+
+topicCreationEnabled: true
+topics:
+  - name: foo
+    partitions: 2
+    replicationFactor: 1
+
+  - name: bar
+    partitions: 2
+    replicationFactor: 1
+    configs:
+      cleanup.policy: compact

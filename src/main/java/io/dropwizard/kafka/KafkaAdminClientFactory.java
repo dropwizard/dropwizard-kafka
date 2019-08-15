@@ -10,17 +10,20 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.util.Duration;
 import org.apache.kafka.clients.ClientDnsLookup;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.metrics.MetricsReporter;
 import org.apache.kafka.common.metrics.Sensor;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public abstract class KafkaAdminClientFactory {
     @NotNull
     @JsonProperty
@@ -79,6 +82,12 @@ public abstract class KafkaAdminClientFactory {
     @Valid
     @JsonProperty
     protected SecurityFactory security;
+    @JsonProperty
+    protected boolean topicCreationEnabled = false;
+    @Valid
+    @NotNull
+    @JsonProperty
+    protected Set<KafkaTopicFactory> topics = Collections.emptySet();
 
     public String getName() {
         return name;
@@ -224,12 +233,34 @@ public abstract class KafkaAdminClientFactory {
         this.security = security;
     }
 
+    public Set<KafkaTopicFactory> getTopics() {
+        return topics;
+    }
+
+    public Boolean getTopicCreationEnabled() {
+        return topicCreationEnabled;
+    }
+
+    public void setTopicCreationEnabled(boolean topicCreationEnabled) {
+        this.topicCreationEnabled = topicCreationEnabled;
+    }
+
     protected AdminClient buildAdminClient(final Map<String, Object> config) {
         return AdminClient.create(config);
     }
 
     protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient) {
-        lifecycle.manage(new KafkaAdminClientManager(adminClient, name));
+        List<NewTopic> newTopics = Collections.emptyList();
+        if (topicCreationEnabled) {
+            newTopics = topics.stream()
+                    .map(KafkaTopicFactory::asNewTopic)
+                    .collect(Collectors.toList());
+        }
+        manageAdminClient(lifecycle, adminClient, newTopics);
+    }
+
+    protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient, final Collection<NewTopic> topics) {
+        lifecycle.manage(new KafkaAdminClientManager(adminClient, name, topics));
     }
 
     protected void registerHealthCheck(final HealthCheckRegistry healthChecks, final AdminClient adminClient) {
@@ -237,4 +268,6 @@ public abstract class KafkaAdminClientFactory {
     }
 
     public abstract AdminClient build(HealthCheckRegistry healthChecks, LifecycleEnvironment lifecycle, Map<String, Object> config);
+
+    public abstract AdminClient build(HealthCheckRegistry healthChecks, LifecycleEnvironment lifecycle, Map<String, Object> config, Collection<NewTopic> topics);
 }
