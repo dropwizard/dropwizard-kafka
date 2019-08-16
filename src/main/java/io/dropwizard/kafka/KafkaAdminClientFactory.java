@@ -2,6 +2,7 @@ package io.dropwizard.kafka;
 
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.kafka.health.KafkaAdminHealthCheck;
 import io.dropwizard.kafka.managed.KafkaAdminClientManager;
 import io.dropwizard.kafka.metrics.DropwizardMetricsReporter;
@@ -14,9 +15,6 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.metrics.MetricsReporter;
 import org.apache.kafka.common.metrics.Sensor;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -24,66 +22,91 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaAdminClientFactory {
     @NotNull
     @JsonProperty
     protected String name;
+
     @NotNull
     @JsonProperty
     protected String clientId;
+
+    @NotNull
     @JsonProperty
-    protected Set<String> bootstrapServers;
+    protected Set<String> bootstrapServers = Collections.emptySet();
+
     @NotNull
     @JsonProperty
     protected ClientDnsLookup clientDnsLookup = ClientDnsLookup.DEFAULT;
+
     @NotNull
     @JsonProperty
     protected Duration reconnectBackoff = Duration.milliseconds(50);
+
     @NotNull
     @JsonProperty
     protected Duration reconnectBackoffMax = Duration.seconds(1);
+
     @Min(0)
     @NotNull
     @JsonProperty
     protected Integer retries = 5;
+
     @NotNull
     @JsonProperty
     protected Duration retryBackoff = Duration.milliseconds(100);
+
     @NotNull
     @JsonProperty
     protected Duration connectionMaxIdle = Duration.minutes(5);
+
     @NotNull
     @JsonProperty
     protected Duration requestTimeout = Duration.minutes(2);
+
     @NotNull
     @JsonProperty
     protected Duration metadataMaxAge = Duration.minutes(5);
+
     @Min(-1)
     @NotNull
     @JsonProperty
     protected Integer sendBufferBytes = 131072; // default taken from AdminClientConfig
+
     @Min(-1)
     @NotNull
     @JsonProperty
     protected Integer receiveBufferBytes = 65536; // default taken from AdminClientConfig
+
     @NotNull
     @JsonProperty
     protected List<Class<? extends MetricsReporter>> metricsReporters = Collections.singletonList(DropwizardMetricsReporter.class);
+
     @Min(1)
     @NotNull
     @JsonProperty
     protected Integer metricsSamples = 2; // default in AdminClientConfig
+
     @NotNull
     @JsonProperty
     protected Duration metricsSampleWindow = Duration.seconds(30);
+
     @NotNull
     @JsonProperty
     protected Sensor.RecordingLevel metricsRecordingLevel = Sensor.RecordingLevel.INFO;
+
     @Valid
     @JsonProperty
     protected SecurityFactory security;
+
     @JsonProperty
     protected boolean topicCreationEnabled = false;
+
     @Valid
     @NotNull
     @JsonProperty
@@ -259,7 +282,8 @@ public abstract class KafkaAdminClientFactory {
         manageAdminClient(lifecycle, adminClient, newTopics);
     }
 
-    protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient, final Collection<NewTopic> topics) {
+    protected void manageAdminClient(final LifecycleEnvironment lifecycle, final AdminClient adminClient,
+                                     final Collection<NewTopic> topics) {
         lifecycle.manage(new KafkaAdminClientManager(adminClient, name, topics));
     }
 
@@ -267,7 +291,9 @@ public abstract class KafkaAdminClientFactory {
         healthChecks.register(name, new KafkaAdminHealthCheck(adminClient, name));
     }
 
-    public abstract AdminClient build(HealthCheckRegistry healthChecks, LifecycleEnvironment lifecycle, Map<String, Object> config);
+    public abstract AdminClient build(LifecycleEnvironment lifecycle, HealthCheckRegistry healthChecks,
+                                      Map<String, Object> configOverrides);
 
-    public abstract AdminClient build(HealthCheckRegistry healthChecks, LifecycleEnvironment lifecycle, Map<String, Object> config, Collection<NewTopic> topics);
+    public abstract AdminClient build(LifecycleEnvironment lifecycle, HealthCheckRegistry healthChecks, Map<String, Object> configOverrides,
+                                      Collection<NewTopic> topics);
 }
