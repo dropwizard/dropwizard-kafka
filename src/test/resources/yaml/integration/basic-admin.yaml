@@ -1,3 +1,4 @@
+type: basic
 name: integration-test
 clientId: junit
 metricsReporters: []
