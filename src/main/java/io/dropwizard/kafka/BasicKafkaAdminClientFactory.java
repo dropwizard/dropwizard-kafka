@@ -1,6 +1,7 @@
 package io.dropwizard.kafka;
 
 import com.codahale.metrics.health.HealthCheckRegistry;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.validation.ValidationMethod;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -19,11 +20,12 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
+@JsonTypeName("basic")
 public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
     private static final Logger log = LoggerFactory.getLogger(BasicKafkaAdminClientFactory.class);
 
     @Override
-    public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
+    public AdminClient build(final LifecycleEnvironment lifecycle, final HealthCheckRegistry healthChecks,
                              final Map<String, Object> configOverrides, final Collection<NewTopic> topics) {
         final Map<String, Object> config = new HashMap<>();
 
@@ -64,7 +66,7 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
     }
 
     @Override
-    public AdminClient build(final HealthCheckRegistry healthChecks, final LifecycleEnvironment lifecycle,
+    public AdminClient build(final LifecycleEnvironment lifecycle, final HealthCheckRegistry healthChecks,
                              final Map<String, Object> configOverrides) {
         List<NewTopic> newTopics = Collections.emptyList();
         if (topicCreationEnabled) {
@@ -72,15 +74,15 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
                     .map(KafkaTopicFactory::asNewTopic)
                     .collect(Collectors.toList());
         }
-        return build(healthChecks, lifecycle, configOverrides, newTopics);
+        return build(lifecycle, healthChecks, configOverrides, newTopics);
     }
 
-    @ValidationMethod(message = "Bootstrap servers must not be null or empty in BasicKafkaAdminClientFactory " +
-            "and topics must be defined if allowed to be created")
+    @ValidationMethod(message = "Bootstrap servers must not be empty in BasicKafkaAdminClientFactory and topics must be defined " +
+            "if allowed to be created")
     public boolean isValidConfiguration() {
         final List<String> errors = new ArrayList<>();
 
-        if (bootstrapServers != null && bootstrapServers.isEmpty()) {
+        if (bootstrapServers.isEmpty()) {
             errors.add("bootstrapServers cannot be empty if basic type is configured");
         }
 

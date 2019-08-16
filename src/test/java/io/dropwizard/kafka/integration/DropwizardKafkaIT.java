@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.springframework.kafka.test.core.BrokerAddress;
 import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 
-import javax.validation.Validator;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,6 +33,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+
+import javax.validation.Validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -122,7 +123,7 @@ public class DropwizardKafkaIT {
                 .stream()
                 .map(KafkaTopicFactory::asNewTopic)
                 .collect(Collectors.toList());
-        AdminClient adminClient = factory.build(healthChecks, lifecycle, Collections.emptyMap(), newTopics);
+        AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap(), newTopics);
 
         // forcibly start the managed admin client
         for (LifeCycle lc : lifecycle.getManagedObjects()) {

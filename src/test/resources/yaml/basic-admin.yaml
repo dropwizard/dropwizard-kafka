@@ -1,3 +1,4 @@
+type: basic
 name: test
 clientId: junit
 metricsReporters: []
