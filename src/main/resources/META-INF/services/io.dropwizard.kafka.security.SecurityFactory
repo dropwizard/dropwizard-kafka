@@ -1,2 +1,3 @@
+io.dropwizard.kafka.security.SaslPlaintextSecurityFactory
 io.dropwizard.kafka.security.SaslSslSecurityFactory
 io.dropwizard.kafka.security.SslSecurityFactory
