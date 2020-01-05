@@ -1,5 +1,6 @@
 package io.dropwizard.kafka;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BasicKafkaConsumerFactoryTest {
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
+    private final MetricRegistry metrics = new MetricRegistry();
     private final YamlConfigurationFactory<KafkaConsumerFactory> configFactory =
             new YamlConfigurationFactory<>(KafkaConsumerFactory.class, validator, objectMapper, "dw");
 
@@ -29,7 +31,7 @@ public class BasicKafkaConsumerFactoryTest {
         final KafkaConsumerFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaConsumerFactory.class);
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         final Consumer consumer = factory.build(lifecycle, healthChecks, null, null);

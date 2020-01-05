@@ -1,5 +1,6 @@
 package io.dropwizard.kafka;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BasicKafkaAdminClientFactoryTest {
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
+    private final MetricRegistry metrics = new MetricRegistry();
     private final YamlConfigurationFactory<BasicKafkaAdminClientFactory> configFactory =
             new YamlConfigurationFactory<>(BasicKafkaAdminClientFactory.class, validator, objectMapper, "dw");
 
@@ -30,7 +32,7 @@ public class BasicKafkaAdminClientFactoryTest {
         final KafkaAdminClientFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaAdminClientFactory.class);
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         final AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap());
@@ -44,7 +46,7 @@ public class BasicKafkaAdminClientFactoryTest {
         final KafkaAdminClientFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaAdminClientFactory.class);
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         final AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap());
