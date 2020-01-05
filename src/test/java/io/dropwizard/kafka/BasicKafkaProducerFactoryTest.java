@@ -1,5 +1,6 @@
 package io.dropwizard.kafka;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BasicKafkaProducerFactoryTest {
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
+    private final MetricRegistry metrics = new MetricRegistry();
     private final YamlConfigurationFactory<KafkaProducerFactory> configFactory =
             new YamlConfigurationFactory<>(KafkaProducerFactory.class, validator, objectMapper, "dw");
 
@@ -30,7 +32,7 @@ public class BasicKafkaProducerFactoryTest {
         final KafkaProducerFactory factory = configFactory.build(yml);
         assertThat(factory)
                 .isInstanceOf(KafkaProducerFactory.class);
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 
         final Producer producer = factory.build(lifecycle, healthCheckRegistry, ImmutableList.of("testTopic"), null);

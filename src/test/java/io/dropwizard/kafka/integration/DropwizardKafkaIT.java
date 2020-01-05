@@ -1,5 +1,6 @@
 package io.dropwizard.kafka.integration;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -47,6 +48,7 @@ public class DropwizardKafkaIT {
 
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
+    private final MetricRegistry metrics = new MetricRegistry();
     private final YamlConfigurationFactory<KafkaProducerFactory> producerConfigFactory =
             new YamlConfigurationFactory<>(KafkaProducerFactory.class, validator, objectMapper, "dw");
     private final YamlConfigurationFactory<KafkaConsumerFactory> consumerConfigFactory =
@@ -64,7 +66,7 @@ public class DropwizardKafkaIT {
                         .map(BrokerAddress::toString)
                         .collect(Collectors.toSet())
         );
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         try (final Producer<String, String> producer = factory.build(lifecycle, healthChecks, ImmutableList.of(PRODUCER_TOPIC),
@@ -92,7 +94,7 @@ public class DropwizardKafkaIT {
                         .map(BrokerAddress::toString)
                         .collect(Collectors.toSet())
         );
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         try (final Consumer consumer = factory.build(lifecycle, healthChecks, null, null)) {
@@ -113,7 +115,7 @@ public class DropwizardKafkaIT {
                         .map(BrokerAddress::toString)
                         .collect(Collectors.toSet())
         );
-        final LifecycleEnvironment lifecycle = new LifecycleEnvironment();
+        final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         final Set<KafkaTopicFactory> topics = factory.getTopics();

@@ -72,8 +72,8 @@
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
 
     <brave.version>5.9.1</brave.version>
-    <dropwizard.version>1.3.17</dropwizard.version>
-    <kafka-client.version>2.3.1</kafka-client.version>
+    <dropwizard.version>2.0.0</dropwizard.version>
+    <kafka-client.version>2.4.0</kafka-client.version>
     <spring-kafka.version>2.4.0.RELEASE</spring-kafka.version>
   </properties>
 
@@ -81,7 +81,7 @@
     <dependencies>
       <dependency>
         <groupId>io.dropwizard</groupId>
-        <artifactId>dropwizard-bom</artifactId>
+        <artifactId>dropwizard-dependencies</artifactId>
         <version>${dropwizard.version}</version>
         <type>pom</type>
         <scope>import</scope>
