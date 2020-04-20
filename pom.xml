@@ -8,7 +8,7 @@
 
   <groupId>io.dropwizard.modules</groupId>
   <artifactId>dropwizard-kafka</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.6.0</version>
   <packaging>jar</packaging>
 
   <name>Dropwizard Kafka</name>
