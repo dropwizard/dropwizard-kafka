@@ -43,17 +43,12 @@ public class StringDeserializerFactory extends DeserializerFactory {
     @Override
     public Map<String, Object> build(final boolean isKey) {
         final String deserializerPropertyName;
-        if (isKey) {
-            deserializerPropertyName = ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
-        }
-        else {
-            deserializerPropertyName = ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
-        }
         final String encodingPropertyName;
         if (isKey) {
+            deserializerPropertyName = ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "key.deserializer.encoding";
-        }
-        else {
+        } else {
+            deserializerPropertyName = ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "value.deserializer.encoding";
         }
 

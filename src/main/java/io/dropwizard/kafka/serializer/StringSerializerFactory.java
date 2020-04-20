@@ -43,17 +43,12 @@ public class StringSerializerFactory extends SerializerFactory {
     @Override
     public Map<String, Object> build(final boolean isKey) {
         final String serializerPropertyName;
-        if (isKey) {
-            serializerPropertyName = ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
-        }
-        else {
-            serializerPropertyName = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
-        }
         final String encodingPropertyName;
         if (isKey) {
+            serializerPropertyName = ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "key.serializer.encoding";
-        }
-        else {
+        } else {
+            serializerPropertyName = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "value.serializer.encoding";
         }
 

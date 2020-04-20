@@ -43,18 +43,12 @@ public class UUIDDeserializerFactory extends DeserializerFactory {
     @Override
     public Map<String, Object> build(final boolean isKey) {
         final String propertyName;
-        if (isKey) {
-            propertyName = ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
-        }
-        else {
-            propertyName = ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
-        }
-        
         final String encodingPropertyName;
         if (isKey) {
+            propertyName = ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "key.deserializer.encoding";
-        }
-        else {
+        } else {
+            propertyName = ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "value.deserializer.encoding";
         }
 

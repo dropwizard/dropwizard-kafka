@@ -43,17 +43,12 @@ public class UUIDSerializerFactory extends SerializerFactory {
     @Override
     public Map<String, Object> build(final boolean isKey) {
         final String propertyName;
-        if (isKey) {
-            propertyName = ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
-        }
-        else {
-            propertyName = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
-        }
         final String encodingPropertyName;
         if (isKey) {
+            propertyName = ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "key.serializer.encoding";
-        }
-        else {
+        } else {
+            propertyName = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
             encodingPropertyName = "value.serializer.encoding";
         }
 
