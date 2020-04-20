@@ -28,7 +28,8 @@ public class SslSecurityFactory extends SecurityFactory {
     public Map<String, Object> build() {
         return ImmutableMap.of(
                 CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, securityProtocol.toUpperCase(),
-                SslConfigs.SSL_PROTOCOL_CONFIG, sslProtocol
+                SslConfigs.SSL_PROTOCOL_CONFIG, sslProtocol,
+                SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, sslEndpointIdentificationAlgorithm
         );
     }
 }
