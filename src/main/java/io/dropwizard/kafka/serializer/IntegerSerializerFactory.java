@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.Serializer;
 @JsonTypeName("integer")
 public class IntegerSerializerFactory extends SerializerFactory {
     @Override
-    public Class<? extends Serializer> getSerializerClass() {
+    public Class<? extends Serializer<?>> getSerializerClass() {
         return IntegerSerializer.class;
     }
 }

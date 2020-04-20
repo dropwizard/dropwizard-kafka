@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Map;
+
+import javax.validation.constraints.NotEmpty;
 
 @JsonTypeName("ssl")
 public class SslSecurityFactory extends SecurityFactory {
@@ -28,7 +29,8 @@ public class SslSecurityFactory extends SecurityFactory {
     public Map<String, Object> build() {
         return ImmutableMap.of(
                 CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, securityProtocol.toUpperCase(),
-                SslConfigs.SSL_PROTOCOL_CONFIG, sslProtocol
+                SslConfigs.SSL_PROTOCOL_CONFIG, sslProtocol,
+                SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, sslEndpointIdentificationAlgorithm
         );
     }
 }

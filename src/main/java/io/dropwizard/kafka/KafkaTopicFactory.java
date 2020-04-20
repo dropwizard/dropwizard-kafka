@@ -1,19 +1,15 @@
 package io.dropwizard.kafka;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.jackson.Discoverable;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class KafkaTopicFactory {
 

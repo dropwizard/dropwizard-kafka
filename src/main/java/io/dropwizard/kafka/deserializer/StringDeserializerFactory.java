@@ -36,15 +36,21 @@ public class StringDeserializerFactory extends DeserializerFactory {
     }
 
     @Override
-    public Class<? extends Deserializer> getDeserializerClass() {
+    public Class<? extends Deserializer<?>> getDeserializerClass() {
         return StringDeserializer.class;
     }
 
     @Override
     public Map<String, Object> build(final boolean isKey) {
-        final String deserializerPropertyName = isKey ?
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG : ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
-        final String encodingPropertyName = isKey ? "key.deserializer.encoding" : "value.deserializer.encoding";
+        final String deserializerPropertyName;
+        final String encodingPropertyName;
+        if (isKey) {
+            deserializerPropertyName = ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
+            encodingPropertyName = "key.deserializer.encoding";
+        } else {
+            deserializerPropertyName = ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
+            encodingPropertyName = "value.deserializer.encoding";
+        }
 
         final Map<String, Object> config = new HashMap<>();
         config.put(deserializerPropertyName, getDeserializerClass());

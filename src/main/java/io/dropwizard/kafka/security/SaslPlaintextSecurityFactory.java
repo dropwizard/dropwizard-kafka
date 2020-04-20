@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SaslConfigs;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.apache.kafka.common.config.SslConfigs;
 
 import java.util.Map;
-import java.util.Optional;
+
+import javax.validation.constraints.NotEmpty;
 
 @JsonTypeName("sasl_plaintext")
 public class SaslPlaintextSecurityFactory extends SecurityFactory {
@@ -18,7 +19,7 @@ public class SaslPlaintextSecurityFactory extends SecurityFactory {
     private String saslMechanism = "PLAIN";
 
     @JsonProperty
-    private Optional<String> saslJaas = Optional.empty();
+    private String saslJaas;
 
     public String getSaslMechanism() {
         return saslMechanism;
@@ -28,13 +29,24 @@ public class SaslPlaintextSecurityFactory extends SecurityFactory {
         this.saslMechanism = saslMechanism;
     }
 
+    public String getSaslJaas() {
+        return saslJaas;
+    }
+
+    public void setSaslJaas(final String saslJaas) {
+        this.saslJaas = saslJaas;
+    }
+
     @Override
     public Map<String, Object> build() {
         final ImmutableMap.Builder<String, Object> builder = ImmutableMap.<String, Object>builder()
                 .put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, securityProtocol.toUpperCase())
-                .put(SaslConfigs.SASL_MECHANISM, saslMechanism);
+                .put(SaslConfigs.SASL_MECHANISM, saslMechanism)
+                .put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, sslEndpointIdentificationAlgorithm);
 
-        saslJaas.ifPresent(jaas -> builder.put(SaslConfigs.SASL_JAAS_CONFIG, jaas));
+        if (saslJaas != null) {
+            builder.put(SaslConfigs.SASL_JAAS_CONFIG, saslJaas);
+        }
 
         return builder.build();
     }

@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.common.config.SslConfigs;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Map;
+
+import javax.validation.constraints.NotEmpty;
 
 @JsonTypeName("sasl_ssl")
 public class SaslSslSecurityFactory extends SaslPlaintextSecurityFactory {

@@ -36,15 +36,21 @@ public class UUIDDeserializerFactory extends DeserializerFactory {
     }
 
     @Override
-    public Class<? extends Deserializer> getDeserializerClass() {
+    public Class<? extends Deserializer<?>> getDeserializerClass() {
         return UUIDDeserializer.class;
     }
 
     @Override
     public Map<String, Object> build(final boolean isKey) {
-        final String propertyName = isKey ?
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG : ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
-        final String encodingPropertyName = isKey ? "key.deserializer.encoding" : "value.deserializer.encoding";
+        final String propertyName;
+        final String encodingPropertyName;
+        if (isKey) {
+            propertyName = ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
+            encodingPropertyName = "key.deserializer.encoding";
+        } else {
+            propertyName = ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
+            encodingPropertyName = "value.deserializer.encoding";
+        }
 
         final Map<String, Object> config = new HashMap<>();
         config.put(propertyName, getDeserializerClass());
