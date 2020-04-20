@@ -16,7 +16,6 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +24,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")

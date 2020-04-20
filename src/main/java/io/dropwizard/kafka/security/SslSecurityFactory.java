@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Map;
+
+import javax.validation.constraints.NotEmpty;
 
 @JsonTypeName("ssl")
 public class SslSecurityFactory extends SecurityFactory {

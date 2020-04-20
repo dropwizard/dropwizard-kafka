@@ -50,7 +50,6 @@ public class TracingFactory {
         }
 
         return Optional.of(KafkaTracing.newBuilder(tracing)
-                .writeB3SingleFormat(writeB3SingleFormat)
                 .remoteServiceName(remoteServiceName)
                 .build());
     }

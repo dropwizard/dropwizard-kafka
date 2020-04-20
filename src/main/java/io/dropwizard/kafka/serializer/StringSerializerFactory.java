@@ -36,15 +36,26 @@ public class StringSerializerFactory extends SerializerFactory {
     }
 
     @Override
-    public Class<? extends Serializer> getSerializerClass() {
+    public Class<? extends Serializer<?>> getSerializerClass() {
         return StringSerializer.class;
     }
 
     @Override
     public Map<String, Object> build(final boolean isKey) {
-        final String serializerPropertyName = isKey ?
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG : ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
-        final String encodingPropertyName = isKey ? "key.serializer.encoding" : "value.serializer.encoding";
+        final String serializerPropertyName;
+        if (isKey) {
+            serializerPropertyName = ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
+        }
+        else {
+            serializerPropertyName = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+        }
+        final String encodingPropertyName;
+        if (isKey) {
+            encodingPropertyName = "key.serializer.encoding";
+        }
+        else {
+            encodingPropertyName = "value.serializer.encoding";
+        }
 
         final Map<String, Object> config = new HashMap<>();
         config.put(serializerPropertyName, getSerializerClass());

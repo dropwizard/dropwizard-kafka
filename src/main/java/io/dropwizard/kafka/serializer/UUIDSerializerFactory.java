@@ -36,14 +36,26 @@ public class UUIDSerializerFactory extends SerializerFactory {
     }
 
     @Override
-    public Class<? extends Serializer> getSerializerClass() {
+    public Class<? extends Serializer<?>> getSerializerClass() {
         return UUIDSerializer.class;
     }
 
     @Override
     public Map<String, Object> build(final boolean isKey) {
-        final String propertyName = isKey ? ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG : ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
-        final String encodingPropertyName = isKey ? "key.serializer.encoding" : "value.serializer.encoding";
+        final String propertyName;
+        if (isKey) {
+            propertyName = ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
+        }
+        else {
+            propertyName = ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+        }
+        final String encodingPropertyName;
+        if (isKey) {
+            encodingPropertyName = "key.serializer.encoding";
+        }
+        else {
+            encodingPropertyName = "value.serializer.encoding";
+        }
 
         final Map<String, Object> config = new HashMap<>();
         config.put(propertyName, getSerializerClass());

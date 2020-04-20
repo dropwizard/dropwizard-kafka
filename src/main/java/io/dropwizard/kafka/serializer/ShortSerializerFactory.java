@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.ShortSerializer;
 @JsonTypeName("short")
 public class ShortSerializerFactory extends SerializerFactory {
     @Override
-    public Class<? extends Serializer> getSerializerClass() {
+    public Class<? extends Serializer<?>> getSerializerClass() {
         return ShortSerializer.class;
     }
 }
