@@ -71,7 +71,7 @@
     <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
 
-    <brave.version>5.12.3</brave.version>
+    <brave.version>5.12.4</brave.version>
     <dropwizard.version>2.0.12</dropwizard.version>
     <kafka-client.version>2.4.1</kafka-client.version>
     <spring-kafka.version>2.5.4.RELEASE</spring-kafka.version>
