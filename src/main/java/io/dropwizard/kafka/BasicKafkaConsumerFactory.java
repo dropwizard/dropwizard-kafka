@@ -12,17 +12,17 @@ import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import static java.util.Objects.requireNonNull;
 
 @JsonTypeName("basic")
 public class BasicKafkaConsumerFactory<K, V> extends KafkaConsumerFactory<K, V> {
+
     private static final Logger log = LoggerFactory.getLogger(BasicKafkaConsumerFactory.class);
 
     @Override
@@ -34,25 +34,20 @@ public class BasicKafkaConsumerFactory<K, V> extends KafkaConsumerFactory<K, V> 
         final Map<String, Object> config = createBaseKafkaConfigurations();
 
         config.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, String.join(",", bootstrapServers));
-
         config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
 
         if (!requireNonNull(configOverrides).isEmpty()) {
             config.putAll(configOverrides);
         }
-
         final Optional<KafkaTracing> kafkaTracing = Optional.ofNullable(getTracingFactory())
                 .flatMap(tracingFactory -> tracingFactory.build(tracing));
 
         final Consumer<K, V> rawConsumer = buildConsumer(config);
-
         final Consumer<K, V> consumer = kafkaTracing.map(kTracing -> kTracing.consumer(rawConsumer))
                 .orElse(rawConsumer);
 
         manageConsumer(lifecycle, consumer);
-
         registerHealthCheck(healthChecks, consumer);
-
         return consumer;
     }
 

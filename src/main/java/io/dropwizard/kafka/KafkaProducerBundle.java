@@ -7,15 +7,16 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.apache.kafka.clients.producer.Producer;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings("unused")
 public abstract class KafkaProducerBundle<K, V, T extends Configuration> implements ConfiguredBundle<T> {
+
     private final Collection<String> topics;
     private final Map<String, Object> configOverrides;
 

@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.FloatDeserializer;
 
 @JsonTypeName("float")
 public class FloatDeserializerFactory extends DeserializerFactory {
+
     @Override
     public Class<? extends Deserializer<?>> getDeserializerClass() {
         return FloatDeserializer.class;

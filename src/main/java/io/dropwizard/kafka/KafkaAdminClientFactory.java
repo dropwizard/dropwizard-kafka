@@ -15,6 +15,9 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.metrics.MetricsReporter;
 import org.apache.kafka.common.metrics.Sensor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -22,12 +25,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaAdminClientFactory {
+
     @NotNull
     @JsonProperty
     protected String name;

@@ -3,13 +3,12 @@ package io.dropwizard.kafka;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.kafka.clients.admin.NewTopic;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
 
 public class KafkaTopicFactory {
 
@@ -80,5 +79,4 @@ public class KafkaTopicFactory {
     public int hashCode() {
         return Objects.hash(name, partitions, replicationFactor, configs);
     }
-
 }

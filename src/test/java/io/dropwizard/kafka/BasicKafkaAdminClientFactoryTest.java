@@ -12,14 +12,15 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.junit.Test;
 
+import javax.validation.Validator;
 import java.io.File;
 import java.util.Collections;
 
-import javax.validation.Validator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("UnstableApiUsage")
 public class BasicKafkaAdminClientFactoryTest {
+
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
     private final MetricRegistry metrics = new MetricRegistry();
@@ -36,28 +37,23 @@ public class BasicKafkaAdminClientFactoryTest {
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
         final AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap());
-        assertThat(adminClient)
-                .isNotNull();
+        assertThat(adminClient).isNotNull();
     }
 
     @Test
     public void shouldBuildABasicKafkaAdminClientWithTopics() throws Exception {
         final File yml = new File(Resources.getResource("yaml/basic-admin.yaml").toURI());
         final KafkaAdminClientFactory factory = configFactory.build(yml);
-        assertThat(factory)
-                .isInstanceOf(KafkaAdminClientFactory.class);
+        assertThat(factory).isInstanceOf(KafkaAdminClientFactory.class);
+
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
-
         final AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap());
-        assertThat(adminClient)
-                .isNotNull();
-        assertThat(factory.getTopicCreationEnabled())
-                .isTrue();
-        assertThat(factory.getTopics().size())
-                .isEqualTo(2);
-    }
 
+        assertThat(adminClient).isNotNull();
+        assertThat(factory.getTopicCreationEnabled()).isTrue();
+        assertThat(factory.getTopics().size()).isEqualTo(2);
+    }
 
 
     @Test

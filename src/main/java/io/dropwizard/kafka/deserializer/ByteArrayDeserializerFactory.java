@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 
 @JsonTypeName("byte-array")
 public class ByteArrayDeserializerFactory extends DeserializerFactory {
+
     @Override
     public Class<? extends Deserializer<?>> getDeserializerClass() {
         return ByteArrayDeserializer.class;

@@ -14,8 +14,12 @@ import java.util.Map;
 
 @JsonTypeName("mock")
 public class MockKafkaConsumerFactory<K, V> extends KafkaConsumerFactory<K, V> {
+
     @Override
-    public Consumer<K, V> build(LifecycleEnvironment lifecycle, HealthCheckRegistry healthChecks, @Nullable Tracing tracing, @Nullable ConsumerRebalanceListener rebalanceListener, Map<String, Object> configOverrides) {
+    public Consumer<K, V> build(LifecycleEnvironment lifecycle, HealthCheckRegistry healthChecks,
+                                @Nullable Tracing tracing,
+                                @Nullable ConsumerRebalanceListener rebalanceListener,
+                                Map<String, Object> configOverrides) {
         return new MockConsumer<>(OffsetResetStrategy.EARLIEST);
     }
 

@@ -11,14 +11,15 @@ import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.junit.Test;
 
+import javax.validation.Validator;
 import java.io.File;
 import java.util.Map;
 
-import javax.validation.Validator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("UnstableApiUsage")
 public class SslSecurityFactoryTest {
+
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
     private final YamlConfigurationFactory<SecurityFactory> configFactory =

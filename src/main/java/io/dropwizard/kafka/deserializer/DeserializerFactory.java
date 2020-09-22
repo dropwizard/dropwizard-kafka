@@ -11,6 +11,7 @@ import java.util.Map;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class DeserializerFactory implements Discoverable {
+
     public abstract Class<? extends Deserializer<?>> getDeserializerClass();
 
     public Map<String, Object> build(final boolean isKey) {
@@ -21,5 +22,5 @@ public abstract class DeserializerFactory implements Discoverable {
         config.put(propertyName, getDeserializerClass());
         return Collections.unmodifiableMap(config);
     }
-
 }
+

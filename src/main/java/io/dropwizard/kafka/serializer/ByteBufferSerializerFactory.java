@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 @JsonTypeName("byte-buffer")
 public class ByteBufferSerializerFactory extends SerializerFactory {
+
     @Override
     public Class<? extends Serializer<?>> getSerializerClass() {
         return ByteBufferSerializer.class;

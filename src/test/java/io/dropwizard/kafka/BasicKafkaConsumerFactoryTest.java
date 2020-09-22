@@ -12,13 +12,14 @@ import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.junit.Test;
 
-import java.io.File;
-
 import javax.validation.Validator;
+import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("UnstableApiUsage")
 public class BasicKafkaConsumerFactoryTest {
+
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
     private final MetricRegistry metrics = new MetricRegistry();
@@ -29,15 +30,12 @@ public class BasicKafkaConsumerFactoryTest {
     public void shouldBuildABasicKafkaConsumer() throws Exception {
         final File yml = new File(Resources.getResource("yaml/basic-consumer.yaml").toURI());
         final KafkaConsumerFactory factory = configFactory.build(yml);
-        assertThat(factory)
-                .isInstanceOf(KafkaConsumerFactory.class);
+        assertThat(factory).isInstanceOf(KafkaConsumerFactory.class);
+
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
-
         final Consumer consumer = factory.build(lifecycle, healthChecks, null, null);
-
-        assertThat(consumer)
-                .isNotNull();
+        assertThat(consumer).isNotNull();
     }
 
     @Test

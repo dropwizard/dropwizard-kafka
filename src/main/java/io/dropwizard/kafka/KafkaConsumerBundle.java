@@ -8,16 +8,17 @@ import io.dropwizard.setup.Environment;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings("unused")
 public abstract class KafkaConsumerBundle<K, V, T extends Configuration> implements ConfiguredBundle<T> {
+
     private final Collection<String> topics;
     private final ConsumerRebalanceListener consumerRebalanceListener;
     private final Map<String, Object> configOverrides;
@@ -44,7 +45,7 @@ public abstract class KafkaConsumerBundle<K, V, T extends Configuration> impleme
     }
 
     @Override
-    public void run(final T configuration, final Environment environment) throws Exception {
+    public void run(final T configuration, final Environment environment) {
         final KafkaConsumerFactory<K, V> kafkaConsumerFactory = requireNonNull(getKafkaConsumerFactory(configuration));
 
         final Tracing tracing = Tracing.current();
@@ -59,3 +60,4 @@ public abstract class KafkaConsumerBundle<K, V, T extends Configuration> impleme
         return requireNonNull(consumer);
     }
 }
+

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Optional;
 
 public class TracingFactory {
+
     @JsonProperty
     private boolean enabled = true;
 
@@ -48,7 +49,6 @@ public class TracingFactory {
         if (!enabled) {
             return Optional.empty();
         }
-
         return Optional.of(KafkaTracing.newBuilder(tracing)
                 .remoteServiceName(remoteServiceName)
                 .build());

@@ -14,7 +14,9 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("UnstableApiUsage")
 public class KafkaTopicFactoryTest {
+
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
     private final YamlConfigurationFactory<KafkaTopicFactory> configFactory =
@@ -24,8 +26,7 @@ public class KafkaTopicFactoryTest {
     public void shouldBuildKafkaTopicsFactory() throws Exception {
         final File yml = new File(Resources.getResource("yaml/topic.yaml").toURI());
         final KafkaTopicFactory factory = configFactory.build(yml);
-        assertThat(factory)
-                .isInstanceOf(KafkaTopicFactory.class);
+        assertThat(factory).isInstanceOf(KafkaTopicFactory.class);
     }
 
     @Test
@@ -39,5 +40,4 @@ public class KafkaTopicFactoryTest {
         assertThat(newTopic.replicationFactor()).isEqualTo((short) 1);
         assertThat(newTopic.configs().get(TopicConfig.CLEANUP_POLICY_CONFIG)).isEqualTo(TopicConfig.CLEANUP_POLICY_COMPACT);
     }
-
 }

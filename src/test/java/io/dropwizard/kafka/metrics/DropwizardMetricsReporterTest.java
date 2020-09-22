@@ -31,8 +31,7 @@ public class DropwizardMetricsReporterTest {
                 DropwizardMetricsReporter.METRICS_NAME_CONFIG, "test"
         ));
 
-        assertThat(metricsReporter.isIncludeTags())
-                .isTrue();
+        assertThat(metricsReporter.isIncludeTags()).isTrue();
     }
 
     @Test
@@ -41,8 +40,7 @@ public class DropwizardMetricsReporterTest {
                 DropwizardMetricsReporter.METRICS_NAME_CONFIG, "test"
         ));
 
-        assertThat(metricsReporter.isIncludeTags())
-                .isFalse();
+        assertThat(metricsReporter.isIncludeTags()).isFalse();
     }
 
     @Test

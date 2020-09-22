@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.DoubleDeserializer;
 
 @JsonTypeName("double")
 public class DoubleDeserializerFactory extends DeserializerFactory {
+
     @Override
     public Class<? extends Deserializer<?>> getDeserializerClass() {
         return DoubleDeserializer.class;

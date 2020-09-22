@@ -10,14 +10,15 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.FloatSerializer;
 import org.junit.Test;
 
+import javax.validation.Validator;
 import java.io.File;
 import java.util.Map;
 
-import javax.validation.Validator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("UnstableApiUsage")
 public class FloatSerializerFactoryTest {
+
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
     private final YamlConfigurationFactory<SerializerFactory> configFactory =

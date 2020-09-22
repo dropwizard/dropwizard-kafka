@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.kafka.security.SecurityFactory;
 import io.dropwizard.kafka.tracing.TracingFactory;
 import io.dropwizard.validation.ValidationMethod;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.validation.Valid;
-
 public abstract class KafkaClientFactory {
-    @NotEmpty
+
+    @NotBlank
     @JsonProperty
     protected String name;
 

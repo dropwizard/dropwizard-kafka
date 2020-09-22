@@ -14,7 +14,11 @@ import java.util.Map;
 @JsonTypeName("mock")
 public class MockKafkaProducerFactory<K, V> extends KafkaProducerFactory<K, V> {
     @Override
-    public Producer<K, V> build(LifecycleEnvironment lifecycle, HealthCheckRegistry healthChecks, Collection<String> topics, @Nullable Tracing tracing, Map<String, Object> configOverrides) {
+    public Producer<K, V> build(LifecycleEnvironment lifecycle,
+                                HealthCheckRegistry healthChecks,
+                                Collection<String> topics,
+                                @Nullable Tracing tracing,
+                                Map<String, Object> configOverrides) {
         return new MockProducer<>();
     }
 

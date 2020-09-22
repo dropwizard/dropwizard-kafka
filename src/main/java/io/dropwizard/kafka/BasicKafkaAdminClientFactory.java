@@ -22,6 +22,7 @@ import static java.util.Objects.requireNonNull;
 
 @JsonTypeName("basic")
 public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
+
     private static final Logger log = LoggerFactory.getLogger(BasicKafkaAdminClientFactory.class);
 
     @Override
@@ -70,7 +71,7 @@ public class BasicKafkaAdminClientFactory extends KafkaAdminClientFactory {
                              final Map<String, Object> configOverrides) {
         List<NewTopic> newTopics = Collections.emptyList();
         if (topicCreationEnabled) {
-             newTopics = topics.stream()
+            newTopics = topics.stream()
                     .map(KafkaTopicFactory::asNewTopic)
                     .collect(Collectors.toList());
         }

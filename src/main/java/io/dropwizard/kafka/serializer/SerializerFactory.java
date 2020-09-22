@@ -11,6 +11,7 @@ import java.util.Map;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class SerializerFactory implements Discoverable {
+
     public abstract Class<? extends Serializer<?>> getSerializerClass();
 
     public Map<String, Object> build(final boolean isKey) {

@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.springframework.kafka.test.core.BrokerAddress;
 import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 
+import javax.validation.Validator;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,11 +36,11 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import javax.validation.Validator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DropwizardKafkaIT {
+@SuppressWarnings("UnstableApiUsage")
+public class DropwizardKafkaIntegrationTest {
+
     private static final String PRODUCER_TOPIC = "producerTest";
     private static final String CONSUMER_TOPIC = "consumerTest";
 
@@ -101,8 +102,7 @@ public class DropwizardKafkaIT {
             consumer.subscribe(ImmutableList.of(CONSUMER_TOPIC));
             final ConsumerRecords<String, String> foundRecords = consumer.poll(10L);
 
-            assertThat(foundRecords)
-                    .isEmpty();
+            assertThat(foundRecords).isEmpty();
         }
     }
 

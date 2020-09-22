@@ -10,18 +10,18 @@ import org.apache.kafka.clients.producer.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import static java.util.Objects.requireNonNull;
 
 @JsonTypeName("basic")
 public class BasicKafkaProducerFactory<K, V> extends KafkaProducerFactory<K, V> {
+
     private static final Logger log = LoggerFactory.getLogger(BasicKafkaProducerFactory.class);
 
     @Override
@@ -42,14 +42,11 @@ public class BasicKafkaProducerFactory<K, V> extends KafkaProducerFactory<K, V> 
                 .flatMap(tracingFactory -> tracingFactory.build(tracing));
 
         final Producer<K, V> rawProducer = buildProducer(config);
-
         final Producer<K, V> producer = kafkaTracing.map(kTracing -> kTracing.producer(rawProducer))
                 .orElse(rawProducer);
 
         manageProducer(lifecycle, producer);
-
         registerProducerHealthCheck(healthChecks, producer, topics);
-
         return producer;
     }
 

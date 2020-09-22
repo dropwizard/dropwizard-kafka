@@ -1,19 +1,20 @@
 package io.dropwizard.kafka.managed;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import io.dropwizard.lifecycle.Managed;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import static java.util.Objects.requireNonNull;
 
 public class KafkaAdminClientManager implements Managed {
+
     private static final Logger log = LoggerFactory.getLogger(KafkaAdminClientManager.class);
 
     private final AdminClient adminClient;
@@ -33,11 +34,11 @@ public class KafkaAdminClientManager implements Managed {
             log.trace("Searching existing topics in cluster.");
             final Set<String> existingTopics = this.adminClient.listTopics().names().get();
             final List<String> matchingTopics = new ArrayList<>();
-            for (String t : existingTopics) {
+            for (String topic : existingTopics) {
                 this.topics.removeIf(newTopic -> {
-                    boolean match = newTopic.name().equals(t);
+                    boolean match = newTopic.name().equals(topic);
                     if (match) {
-                        matchingTopics.add(t);
+                        matchingTopics.add(topic);
                     }
                     return match;
                 });
@@ -50,7 +51,7 @@ public class KafkaAdminClientManager implements Managed {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         log.info("Shutting down adminClient for name={}", name);
         adminClient.close();
     }

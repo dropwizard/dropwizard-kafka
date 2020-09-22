@@ -10,6 +10,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 public class KafkaAdminHealthCheck extends HealthCheck {
+
     private final AdminClient adminClient;
     private final String name;
 
@@ -19,7 +20,7 @@ public class KafkaAdminHealthCheck extends HealthCheck {
     }
 
     @Override
-    protected Result check() throws Exception {
+    protected Result check() {
         try {
             final DescribeClusterResult response = adminClient.describeCluster();
 

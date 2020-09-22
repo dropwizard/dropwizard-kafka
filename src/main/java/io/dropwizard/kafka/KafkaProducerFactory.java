@@ -32,6 +32,7 @@ import java.util.Optional;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public abstract class KafkaProducerFactory<K, V> extends KafkaClientFactory implements Discoverable {
+
     @Valid
     @NotNull
     @JsonProperty

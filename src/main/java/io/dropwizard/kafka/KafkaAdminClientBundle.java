@@ -8,16 +8,17 @@ import io.dropwizard.setup.Environment;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings("unused")
 public abstract class KafkaAdminClientBundle<T extends Configuration> implements ConfiguredBundle<T> {
+
     private final Collection<NewTopic> topics;
     private final Map<String, Object> configOverrides;
 
@@ -43,7 +44,7 @@ public abstract class KafkaAdminClientBundle<T extends Configuration> implements
     }
 
     @Override
-    public void run(final T configuration, final Environment environment) throws Exception {
+    public void run(final T configuration, final Environment environment) {
         final KafkaAdminClientFactory kafkaAdminClientFactory = requireNonNull(getKafkaAdminClientFactory(configuration));
 
         final Tracing tracing = Tracing.current();

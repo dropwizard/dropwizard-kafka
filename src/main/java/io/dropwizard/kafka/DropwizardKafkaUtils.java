@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DropwizardKafkaUtils {
+
     private static final Logger log = LoggerFactory.getLogger(DropwizardKafkaUtils.class);
 
     private DropwizardKafkaUtils() {
@@ -14,6 +15,7 @@ public class DropwizardKafkaUtils {
         final Class<?> actualClass;
         try {
             actualClass = Class.forName(classString);
+
         } catch (final ClassNotFoundException e) {
             log.error("No valid class found for string={}", classString);
             throw new RuntimeException(e);

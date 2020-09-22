@@ -3,8 +3,6 @@ package io.dropwizard.kafka.managed;
 import io.dropwizard.lifecycle.Managed;
 import org.apache.kafka.clients.producer.Producer;
 
-import java.util.Objects;
-
 import static java.util.Objects.requireNonNull;
 
 public class KafkaProducerManager implements Managed {
@@ -16,12 +14,12 @@ public class KafkaProducerManager implements Managed {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         // do nothing
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         producer.close();
     }
 }

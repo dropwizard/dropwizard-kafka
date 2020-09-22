@@ -12,8 +12,7 @@ public class KafkaProducerHealthCheck extends HealthCheck {
     private final Producer producer;
     private final Collection<String> topics;
 
-    public KafkaProducerHealthCheck(final Producer producer,
-                                    final Collection<String> topics) {
+    public KafkaProducerHealthCheck(final Producer producer, final Collection<String> topics) {
         this.producer = requireNonNull(producer);
         this.topics = requireNonNull(topics);
     }
@@ -23,6 +22,7 @@ public class KafkaProducerHealthCheck extends HealthCheck {
         try {
             topics.forEach(producer::partitionsFor);
             return Result.healthy();
+
         } catch (final Exception e) {
             return Result.unhealthy(e);
         }

@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.LongDeserializer;
 
 @JsonTypeName("long")
 public class LongDeserializerFactory extends DeserializerFactory {
+
     @Override
     public Class<? extends Deserializer<?>> getDeserializerClass() {
         return LongDeserializer.class;

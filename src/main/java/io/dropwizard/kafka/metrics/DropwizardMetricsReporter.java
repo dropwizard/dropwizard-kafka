@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
+@SuppressWarnings("unused")
 public class DropwizardMetricsReporter implements MetricsReporter {
+
     private static final Logger log = LoggerFactory.getLogger(DropwizardMetricsReporter.class);
 
     public static final String SHOULD_INCLUDE_TAGS_CONFIG = "io.dropwizard.kafka.metrics.includeTags";

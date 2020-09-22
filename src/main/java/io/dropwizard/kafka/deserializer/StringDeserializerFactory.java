@@ -8,15 +8,15 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import javax.validation.constraints.NotNull;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
-
 @JsonTypeName("string")
 public class StringDeserializerFactory extends DeserializerFactory {
+
     @NotNull
     @JsonProperty
     private String encoding = "UTF8";
