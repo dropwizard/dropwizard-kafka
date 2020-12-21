@@ -71,6 +71,10 @@
     <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
 
+    <sonar.projectKey>dropwizard_dropwizard-kafka</sonar.projectKey>
+    <sonar.organization>dropwizard</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
     <brave.version>5.13.2</brave.version>
     <dropwizard.version>2.0.17</dropwizard.version>
     <kafka-client.version>2.6.0</kafka-client.version>
@@ -184,6 +188,16 @@
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.0.0-M3</version>
         </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.7.0.1746</version>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.6</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -218,6 +232,24 @@
                 </requireSameVersions>
               </rules>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
