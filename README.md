@@ -1,5 +1,6 @@
 # dropwizard-kafka
-[![Build Status](https://travis-ci.org/dropwizard/dropwizard-kafka.svg?branch=master)](https://travis-ci.org/dropwizard/dropwizard-kafka)
+[![Build](https://github.com/dropwizard/dropwizard-kafka/workflows/Build/badge.svg)](https://github.com/dropwizard/dropwizard-kafka/actions?query=workflow%3ABuild)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dropwizard_dropwizard-kafka&metric=alert_status)](https://sonarcloud.io/dashboard?id=dropwizard_dropwizard-kafka)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.dropwizard.modules/dropwizard-kafka/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.dropwizard.modules/dropwizard-kafka/)
 
 Provides easy integration for Dropwizard applications with the Apache Kafka client. 
