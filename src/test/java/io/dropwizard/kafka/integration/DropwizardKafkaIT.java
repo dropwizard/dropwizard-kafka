@@ -28,6 +28,7 @@ import org.springframework.kafka.test.core.BrokerAddress;
 import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -99,7 +100,7 @@ public class DropwizardKafkaIT {
 
         try (final Consumer consumer = factory.build(lifecycle, healthChecks, null, null)) {
             consumer.subscribe(ImmutableList.of(CONSUMER_TOPIC));
-            final ConsumerRecords<String, String> foundRecords = consumer.poll(10L);
+            final ConsumerRecords<String, String> foundRecords = consumer.poll(Duration.ofMillis(10L));
 
             assertThat(foundRecords)
                     .isEmpty();
