@@ -75,7 +75,7 @@
     <brave.version>5.13.3</brave.version>
     <dropwizard.version>2.0.25</dropwizard.version>
     <kafka-client.version>2.8.1</kafka-client.version>
-    <spring-kafka.version>2.7.7</spring-kafka.version>
+    <spring-kafka.version>2.7.8</spring-kafka.version>
   </properties>
 
   <dependencyManagement>
