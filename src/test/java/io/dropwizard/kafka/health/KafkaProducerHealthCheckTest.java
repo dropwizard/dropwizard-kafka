@@ -3,13 +3,13 @@ package io.dropwizard.kafka.health;
 import com.google.common.collect.ImmutableList;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.common.errors.InterruptException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -30,13 +30,13 @@ public class KafkaProducerHealthCheckTest {
     public void shouldReturnHealthyWhenClusterReportsTopicMetadata() {
         topics.forEach(topic -> when(producerMock.partitionsFor(topic)).thenReturn(Collections.emptyList()));
 
-        Assert.assertThat(healthCheck.check().isHealthy(), is(true));
+        assertThat(healthCheck.check().isHealthy(), is(true));
     }
 
     @Test
     public void shouldReturnUnhealthyWhenClusterFailsToReportTopicMetadata() {
         topics.forEach(topic -> when(producerMock.partitionsFor(topic)).thenThrow(new InterruptException("timed out waiting")));
 
-        Assert.assertThat(healthCheck.check().isHealthy(), is(false));
+        assertThat(healthCheck.check().isHealthy(), is(false));
     }
 }

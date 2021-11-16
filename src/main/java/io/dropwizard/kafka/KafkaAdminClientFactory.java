@@ -42,7 +42,7 @@ public abstract class KafkaAdminClientFactory {
 
     @NotNull
     @JsonProperty
-    protected ClientDnsLookup clientDnsLookup = ClientDnsLookup.DEFAULT;
+    protected ClientDnsLookup clientDnsLookup = ClientDnsLookup.USE_ALL_DNS_IPS;
 
     @NotNull
     @JsonProperty
