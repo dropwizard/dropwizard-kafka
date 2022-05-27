@@ -19,20 +19,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java_version }}
-    - uses: actions/cache@v3
-      if: runner.os != 'Windows'
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - uses: actions/cache@v3
-      if: runner.os == 'Windows'
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**\pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+        cache: 'maven'
     - name: Cache SonarCloud packages
       if: ${{ env.SONAR_TOKEN != null && env.SONAR_TOKEN != '' && matrix.java_version == '11' }}
       env:
