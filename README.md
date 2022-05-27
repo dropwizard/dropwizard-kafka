@@ -16,13 +16,14 @@ This bundle comes with out-of-the-box support for:
 For more information on Kafka, take a look at the official documentation here: http://kafka.apache.org/documentation/
 
 ## Dropwizard Version Support Matrix
-dropwizard-kafka        | Dropwizard v1.3.x  | Dropwizard v2.0.x
------------------------ | ------------------ | ------------------
-v1.3.x                  | :white_check_mark: | :white_check_mark:
-v1.4.x                  | :white_check_mark: | :white_check_mark:
-v1.5.x                  | :white_check_mark: | :white_check_mark:
-v1.6.x                  |                    | :white_check_mark:
-v1.7.x                  |                    | :white_check_mark:
+dropwizard-kafka        | Dropwizard v1.3.x  | Dropwizard v2.0.x  | Dropwizard v2.1.x
+----------------------- | ------------------ | ------------------ | ------------------ 
+v1.3.x                  | :white_check_mark: | :white_check_mark: | :white_check_mark: 
+v1.4.x                  | :white_check_mark: | :white_check_mark: | :white_check_mark: 
+v1.5.x                  | :white_check_mark: | :white_check_mark: | :white_check_mark: 
+v1.6.x                  |                    | :white_check_mark: | :white_check_mark: 
+v1.7.x                  |                    | :white_check_mark: | :white_check_mark: 
+v1.8.x                  |                    |                    | :white_check_mark: 
 
 ## Usage
 Add dependency on library.
