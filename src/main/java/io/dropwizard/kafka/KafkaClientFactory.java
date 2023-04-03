@@ -9,8 +9,8 @@ import io.dropwizard.validation.ValidationMethod;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 public abstract class KafkaClientFactory {
     @NotEmpty

@@ -9,7 +9,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.config.TopicConfig;
 import org.junit.Test;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
