@@ -1,17 +1,16 @@
 package io.dropwizard.kafka;
 
 import brave.Tracing;
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import org.apache.kafka.clients.producer.Producer;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-
-import javax.annotation.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
