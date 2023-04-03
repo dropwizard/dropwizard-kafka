@@ -5,7 +5,7 @@
 
   <groupId>io.dropwizard.modules</groupId>
   <artifactId>dropwizard-kafka</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Dropwizard Kafka</name>
@@ -24,7 +24,7 @@
     <developerConnection>scm:git:git@github.com:dropwizard/dropwizard-kafka.git</developerConnection>
     <connection>scm:git:https://github.com/dropwizard/dropwizard-kafka.git</connection>
     <url>https://github.com/dropwizard/dropwizard-kafka</url>
-    <tag>dropwizard-kafka-3.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <ciManagement>
