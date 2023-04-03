@@ -3,10 +3,10 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dropwizard_dropwizard-kafka&metric=alert_status)](https://sonarcloud.io/dashboard?id=dropwizard_dropwizard-kafka)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.dropwizard.modules/dropwizard-kafka/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.dropwizard.modules/dropwizard-kafka/)
 
-Provides easy integration for Dropwizard applications with the Apache Kafka client. 
+Provides easy integration for Dropwizard applications with the Apache Kafka client.
 
 This bundle comes with out-of-the-box support for:
-* YAML Configuration integration  
+* YAML Configuration integration
 * Producer and Consumer lifecycle management
 * Producer and Cluster connection health checks
 * Metrics integration for the Kafka client
@@ -16,14 +16,16 @@ This bundle comes with out-of-the-box support for:
 For more information on Kafka, take a look at the official documentation here: http://kafka.apache.org/documentation/
 
 ## Dropwizard Version Support Matrix
-dropwizard-kafka        | Dropwizard v1.3.x  | Dropwizard v2.0.x  | Dropwizard v2.1.x
------------------------ | ------------------ | ------------------ | ------------------ 
-v1.3.x                  | :white_check_mark: | :white_check_mark: | :white_check_mark: 
-v1.4.x                  | :white_check_mark: | :white_check_mark: | :white_check_mark: 
-v1.5.x                  | :white_check_mark: | :white_check_mark: | :white_check_mark: 
-v1.6.x                  |                    | :white_check_mark: | :white_check_mark: 
-v1.7.x                  |                    | :white_check_mark: | :white_check_mark: 
-v1.8.x                  |                    |                    | :white_check_mark: 
+| dropwizard-kafka | Dropwizard v1.3.x  | Dropwizard v2.0.x  | Dropwizard v2.1.x  | Dropwizard v3.0.x  | Dropwizard v4.0.x  |
+|------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| v1.3.x           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| v1.4.x           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| v1.5.x           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| v1.6.x           | :x:                | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| v1.7.x           | :x:                | :white_check_mark: | :white_check_mark: | :x:                | :x:                |
+| v1.8.x           | :x:                | :x:                | :white_check_mark: | :x:                | :x:                |
+| v3.0.x           | :x:                | :x:                | :x:                | :white_check_mark: | :x:                |
+| v4.0.x           | :x:                | :x:                | :x:                | :x:                | :white_check_mark: |
 
 ## Usage
 Add dependency on library.
@@ -131,14 +133,14 @@ public void run(ExampleConfiguration config, Environment environment) {
 Configure your factory in your `config.yml` file:
 
 ```yaml
-consumer: 
+consumer:
   type: basic
   bootstrapServers:
     - 127.0.0.1:9092
     - 127.0.0.1:9093
     - 127.0.0.1:9094
   consumerGroupId: consumer1
-  name: consumerNameToBeUsedInMetrics  
+  name: consumerNameToBeUsedInMetrics
   keyDeserializer:
     type: string
   valueDeserializer:
@@ -168,7 +170,7 @@ For example, say you would like to use version `1.1.1` of the Kafka client. One 
     <version>${dropwizard.version}</version>
   </dependency>
 </dependencies>
-``` 
+```
 
 ## Adding support for additional serializers and/or deserializers
 In order to support additional serializers or deserializers, you'll need to create a new factory:
@@ -179,11 +181,11 @@ public class MySerializerFactory extends SerializerFactory {
     @NotNull
     @JsonProperty
     private String someConfig;
-    
+
     public String getSomeConfig() {
         return someConfig;
     }
-  
+
     public void setSomeConfig(final String someConfig) {
         this.someConfig = someConfig;
     }
@@ -196,14 +198,14 @@ public class MySerializerFactory extends SerializerFactory {
 }
 ```
 
-Then you will need to add the following files to your `src/main/resources/META-INF/services` directory in order to support Jackson 
+Then you will need to add the following files to your `src/main/resources/META-INF/services` directory in order to support Jackson
 polymorphic serialization:
 
 File named `io.dropwizard.jackson.Discoverable`:
 
 ```
 io.dropwizard.kafka.serializer.SerializerFactory
-``` 
+```
 
 File named `io.dropwizard.kafka.serializer.SerializerFactory`:
 
