@@ -14,7 +14,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Map;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -12,7 +12,7 @@ import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.junit.Test;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 import java.io.File;
 import java.util.Map;
 

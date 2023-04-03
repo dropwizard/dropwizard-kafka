@@ -1,9 +1,10 @@
 name: Build
-on: 
+on:
   push:
     branches:
     - 2.1.x
     - 3.0.x
+    - 4.0.x
   pull_request:
 jobs:
   build:

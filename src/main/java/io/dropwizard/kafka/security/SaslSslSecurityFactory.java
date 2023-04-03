@@ -7,7 +7,7 @@ import org.apache.kafka.common.config.SslConfigs;
 
 import java.util.Map;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 @JsonTypeName("sasl_ssl")
 public class SaslSslSecurityFactory extends SaslPlaintextSecurityFactory {
