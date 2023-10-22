@@ -73,7 +73,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
     <brave.version>5.16.0</brave.version>
-    <dropwizard.version>3.0.2</dropwizard.version>
+    <dropwizard.version>3.0.3</dropwizard.version>
     <kafka-client.version>3.5.1</kafka-client.version>
     <spring-kafka.version>2.9.13</spring-kafka.version>
   </properties>
