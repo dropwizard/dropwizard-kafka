@@ -1,3 +1,4 @@
+---
 name: foo
 partitions: 3
 replicationFactor: 1
