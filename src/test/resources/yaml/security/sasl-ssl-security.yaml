@@ -1,4 +1,6 @@
+---
 securityProtocol: sasl_ssl
 sslProtocol: TLSv1.2
 saslMechanism: PLAIN
+# yamllint disable-line rule:line-length
 saslJaas: org.apache.kafka.common.security.plain.PlainLoginModule required username="<username>" password="<password>";
