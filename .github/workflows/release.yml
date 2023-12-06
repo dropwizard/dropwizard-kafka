@@ -1,8 +1,10 @@
+---
 name: Release
+# yamllint disable-line rule:truthy
 on:
   push:
     tags:
-    - dropwizard-kafka-*
+      - dropwizard-kafka-*
 jobs:
   release:
     uses: dropwizard/workflows/.github/workflows/release.yml@main
