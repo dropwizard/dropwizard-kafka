@@ -62,11 +62,7 @@ public class DropwizardKafkaIT {
 
         final File yml = new File(Resources.getResource("yaml/integration/basic-producer.yaml").toURI());
         final KafkaProducerFactory<String, String> factory = producerConfigFactory.build(yml);
-        factory.setBootstrapServers(
-                Arrays.stream(kafka.getEmbeddedKafka().getBrokerAddresses())
-                        .map(BrokerAddress::toString)
-                        .collect(Collectors.toSet())
-        );
+        factory.setBootstrapServers(Set.of(kafka.getEmbeddedKafka().getBrokersAsString().split(",")));
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
@@ -90,11 +86,7 @@ public class DropwizardKafkaIT {
     public void basicConsumerShouldConnectToKafka() throws Exception {
         final File yml = new File(Resources.getResource("yaml/integration/basic-consumer.yaml").toURI());
         final KafkaConsumerFactory factory = consumerConfigFactory.build(yml);
-        factory.setBootstrapServers(
-                Arrays.stream(kafka.getEmbeddedKafka().getBrokerAddresses())
-                        .map(BrokerAddress::toString)
-                        .collect(Collectors.toSet())
-        );
+        factory.setBootstrapServers(Set.of(kafka.getEmbeddedKafka().getBrokersAsString().split(",")));
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
@@ -111,11 +103,7 @@ public class DropwizardKafkaIT {
     public void basicAdminShouldCreateTopics() throws Exception {
         final File yml = new File(Resources.getResource("yaml/integration/basic-admin.yaml").toURI());
         final KafkaAdminClientFactory factory = adminTopicConfigFactory.build(yml);
-        factory.setBootstrapServers(
-                Arrays.stream(kafka.getEmbeddedKafka().getBrokerAddresses())
-                        .map(BrokerAddress::toString)
-                        .collect(Collectors.toSet())
-        );
+        factory.setBootstrapServers(Set.of(kafka.getEmbeddedKafka().getBrokersAsString().split(",")));
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
