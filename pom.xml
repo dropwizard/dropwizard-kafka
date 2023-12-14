@@ -55,7 +55,7 @@
       </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
-        <artifactId>kafka-kafka-raft</artifactId>
+        <artifactId>kafka-raft</artifactId>
         <version>${kafka-client.version}</version>
       </dependency>
       <dependency>
