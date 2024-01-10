@@ -25,7 +25,7 @@
   <properties>
     <sonar.projectKey>dropwizard_dropwizard-kafka</sonar.projectKey>
 
-    <brave.version>5.17.0</brave.version>
+    <brave.version>5.17.1</brave.version>
     <kafka-client.version>3.6.1</kafka-client.version>
     <spring-kafka.version>3.1.1</spring-kafka.version>
   </properties>
