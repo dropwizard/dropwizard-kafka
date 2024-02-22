@@ -35,7 +35,7 @@
 
     <brave.version>6.0.1</brave.version>
     <kafka-client.version>3.6.1</kafka-client.version>
-    <spring-kafka.version>3.1.1</spring-kafka.version>
+    <spring-kafka.version>3.1.2</spring-kafka.version>
   </properties>
 
   <dependencyManagement>
