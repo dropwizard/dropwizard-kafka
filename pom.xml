@@ -45,6 +45,11 @@
     <dependencies>
       <dependency>
         <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-server</artifactId>
+        <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
         <artifactId>kafka-clients</artifactId>
         <version>${kafka-client.version}</version>
       </dependency>
@@ -71,8 +76,24 @@
       </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-group-coordinator</artifactId>
+        <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-transaction-coordinator</artifactId>
+        <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
         <artifactId>kafka-server-common</artifactId>
         <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-server-common</artifactId>
+        <version>${kafka-client.version}</version>
+        <classifier>test</classifier>
       </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
