@@ -34,12 +34,17 @@
     <sonar.projectKey>dropwizard_dropwizard-kafka</sonar.projectKey>
 
     <brave.version>6.3.0</brave.version>
-    <kafka-client.version>3.8.1</kafka-client.version>
+    <kafka-client.version>3.9.1</kafka-client.version>
     <spring-kafka.version>3.3.9</spring-kafka.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-server</artifactId>
+        <version>${kafka-client.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
         <artifactId>kafka-clients</artifactId>
@@ -68,8 +73,24 @@
       </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-group-coordinator</artifactId>
+        <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-transaction-coordinator</artifactId>
+        <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
         <artifactId>kafka-server-common</artifactId>
         <version>${kafka-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-server-common</artifactId>
+        <version>${kafka-client.version}</version>
+        <classifier>test</classifier>
       </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
