@@ -9,7 +9,7 @@
   </parent>
   <groupId>io.dropwizard.modules</groupId>
   <artifactId>dropwizard-kafka</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.2</version>
   <packaging>jar</packaging>
 
   <name>Dropwizard Kafka</name>
@@ -208,4 +208,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>dropwizard-kafka-3.0.2</tag>
+  </scm>
 </project>
