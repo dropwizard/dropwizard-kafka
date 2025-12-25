@@ -10,7 +10,7 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.security.auth.SecurityProtocol;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import jakarta.validation.Validator;
 import java.io.File;
