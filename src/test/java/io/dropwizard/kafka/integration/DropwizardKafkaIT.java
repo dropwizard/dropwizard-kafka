@@ -14,6 +14,7 @@ import io.dropwizard.kafka.KafkaConsumerFactory;
 import io.dropwizard.kafka.KafkaProducerFactory;
 import io.dropwizard.kafka.KafkaTopicFactory;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
+import jakarta.validation.Validator;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -21,31 +22,29 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.awaitility.Awaitility;
 import org.eclipse.jetty.util.component.LifeCycle;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.springframework.kafka.test.core.BrokerAddress;
-import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.kafka.test.EmbeddedKafkaKraftBroker;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import jakarta.validation.Validator;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 public class DropwizardKafkaIT {
     private static final String PRODUCER_TOPIC = "producerTest";
     private static final String CONSUMER_TOPIC = "consumerTest";
 
-    @ClassRule
-    public static EmbeddedKafkaRule kafka = new EmbeddedKafkaRule(1, true, PRODUCER_TOPIC, CONSUMER_TOPIC);
+    public static EmbeddedKafkaKraftBroker kafka = new EmbeddedKafkaKraftBroker(1, 1, PRODUCER_TOPIC, CONSUMER_TOPIC);
 
     private final ObjectMapper objectMapper = Jackson.newObjectMapper();
     private final Validator validator = Validators.newValidator();
@@ -57,12 +56,22 @@ public class DropwizardKafkaIT {
     private final YamlConfigurationFactory<BasicKafkaAdminClientFactory> adminTopicConfigFactory =
             new YamlConfigurationFactory<>(BasicKafkaAdminClientFactory.class, validator, objectMapper, "dw");
 
+    @BeforeAll
+    public static void init() {
+        kafka.afterPropertiesSet();
+    }
+
+    @AfterAll
+    public static void destroy() {
+        kafka.destroy();
+    }
+
     @Test
     public void basicProducerShouldConnectToKafka() throws Exception {
 
         final File yml = new File(Resources.getResource("yaml/integration/basic-producer.yaml").toURI());
         final KafkaProducerFactory<String, String> factory = producerConfigFactory.build(yml);
-        factory.setBootstrapServers(Set.of(kafka.getEmbeddedKafka().getBrokersAsString().split(",")));
+        factory.setBootstrapServers(Set.of(kafka.getBrokersAsString().split(",")));
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
@@ -86,7 +95,7 @@ public class DropwizardKafkaIT {
     public void basicConsumerShouldConnectToKafka() throws Exception {
         final File yml = new File(Resources.getResource("yaml/integration/basic-consumer.yaml").toURI());
         final KafkaConsumerFactory factory = consumerConfigFactory.build(yml);
-        factory.setBootstrapServers(Set.of(kafka.getEmbeddedKafka().getBrokersAsString().split(",")));
+        factory.setBootstrapServers(Set.of(kafka.getBrokersAsString().split(",")));
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
@@ -103,7 +112,7 @@ public class DropwizardKafkaIT {
     public void basicAdminShouldCreateTopics() throws Exception {
         final File yml = new File(Resources.getResource("yaml/integration/basic-admin.yaml").toURI());
         final KafkaAdminClientFactory factory = adminTopicConfigFactory.build(yml);
-        factory.setBootstrapServers(Set.of(kafka.getEmbeddedKafka().getBrokersAsString().split(",")));
+        factory.setBootstrapServers(Set.of(kafka.getBrokersAsString().split(",")));
         final LifecycleEnvironment lifecycle = new LifecycleEnvironment(metrics);
         final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
@@ -114,22 +123,19 @@ public class DropwizardKafkaIT {
                 .stream()
                 .map(KafkaTopicFactory::asNewTopic)
                 .collect(Collectors.toList());
-        AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap(), newTopics);
+        try (AdminClient adminClient = factory.build(lifecycle, healthChecks, Collections.emptyMap(), newTopics)) {
+            // forcibly start the managed admin client
+            for (LifeCycle lc : lifecycle.getManagedObjects()) {
+                lc.start();
+            }
 
-        // forcibly start the managed admin client
-        for (LifeCycle lc : lifecycle.getManagedObjects()) {
-            lc.start();
-        }
-
-        Set<String> clusterTopics = adminClient.listTopics().names().get();
-        assertThat(clusterTopics.isEmpty())
-                .isFalse();
-
-        assertThat(clusterTopics.containsAll(
-                newTopics.stream()
+            await().until(() -> {
+                Set<String> clusterTopics = adminClient.listTopics().names().get();
+                return clusterTopics.containsAll(newTopics.stream()
                         .map(NewTopic::name)
-                        .collect(Collectors.toSet())))
-                .isTrue();
+                        .collect(Collectors.toSet()));
+            });
+        }
 
         for (LifeCycle lc : lifecycle.getManagedObjects()) {
             lc.stop();

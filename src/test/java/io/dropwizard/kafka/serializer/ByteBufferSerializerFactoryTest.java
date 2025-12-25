@@ -8,12 +8,12 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.validation.Validators;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.ByteBufferSerializer;
-import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
 import jakarta.validation.Validator;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
