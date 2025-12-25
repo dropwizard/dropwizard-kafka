@@ -7,8 +7,8 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.KafkaMetric;
 import org.apache.kafka.common.metrics.Metrics;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +17,7 @@ public class DropwizardMetricsReporterTest {
     private MetricRegistry registry;
     private DropwizardMetricsReporter metricsReporter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.registry = new MetricRegistry();
         this.metricsReporter = new DropwizardMetricsReporter(registry);
