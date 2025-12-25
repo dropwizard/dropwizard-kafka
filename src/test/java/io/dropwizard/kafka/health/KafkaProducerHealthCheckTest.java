@@ -3,8 +3,8 @@ package io.dropwizard.kafka.health;
 import com.google.common.collect.ImmutableList;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.common.errors.InterruptException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ public class KafkaProducerHealthCheckTest {
 
     private final KafkaProducerHealthCheck healthCheck = new KafkaProducerHealthCheck(producerMock, topics);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         reset(producerMock);
     }

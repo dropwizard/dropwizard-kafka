@@ -34,8 +34,8 @@
     <sonar.projectKey>dropwizard_dropwizard-kafka</sonar.projectKey>
 
     <brave.version>6.3.0</brave.version>
-    <kafka-client.version>3.9.1</kafka-client.version>
-    <spring-kafka.version>3.3.11</spring-kafka.version>
+    <kafka-client.version>4.1.1</kafka-client.version>
+    <spring-kafka.version>4.0.1</spring-kafka.version>
   </properties>
 
   <dependencyManagement>
@@ -134,14 +134,18 @@
 
     <!-- test dependencies -->
     <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
     </dependency>
     <dependency>
       <groupId>io.dropwizard</groupId>
