@@ -1,9 +1,12 @@
 package io.dropwizard.kafka;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DropwizardKafkaUtilsTest {
     @Test
@@ -13,17 +16,17 @@ public class DropwizardKafkaUtilsTest {
         DropwizardKafkaUtils.validateStringIsValidSubClass(integerClassName, Object.class);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void nonSubclassShouldFailValidations() {
         final String arrayListClassName = ArrayList.class.getName();
 
-        DropwizardKafkaUtils.validateStringIsValidSubClass(arrayListClassName, Map.class);
+        assertThrows(IllegalStateException.class, () -> DropwizardKafkaUtils.validateStringIsValidSubClass(arrayListClassName, Map.class));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void classThatDoesNotExistShouldFailValidations() {
         final String fakeClassName = "blah.blah.blah.businesslogic.ObjectFactoryFactoryVisitor";
 
-        DropwizardKafkaUtils.validateStringIsValidSubClass(fakeClassName, Object.class);
+        assertThrows(RuntimeException.class, () -> DropwizardKafkaUtils.validateStringIsValidSubClass(fakeClassName, Object.class));
     }
 }
