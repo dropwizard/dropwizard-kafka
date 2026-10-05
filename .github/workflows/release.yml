@@ -7,5 +7,5 @@ on:
       - dropwizard-kafka-*
 jobs:
   release:
-    uses: dropwizard/workflows/.github/workflows/release.yml@bf2e023abf49088f77953cac78fb30a7b0a64720 # main
+    uses: dropwizard/workflows/.github/workflows/release.yml@2a40bf0a6d89a800fae9d51157b6246bd4e1a9cd # main
     secrets: inherit
